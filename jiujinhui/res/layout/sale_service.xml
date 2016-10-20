@@ -9,12 +9,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="38dp"
-        android:layout_marginLeft="5dp"
+      
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="horizontal"
         android:paddingBottom="2dp"
-        android:layout_marginTop="20dp"
+       
         android:paddingTop="2dp" >
 
         <TextView
@@ -37,9 +37,9 @@
             android:textSize="15sp" />
     </LinearLayout>
     <LinearLayout
-        android:layout_width="308dp"
+        android:layout_width="fill_parent"
         android:layout_height="40dp"
-        android:layout_marginLeft="5dp"
+        
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         android:paddingBottom="2dp"
@@ -90,7 +90,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
+       
         android:orientation="horizontal" >
 
         <TextView
@@ -120,7 +120,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
+     
         android:layout_marginTop="5dp"
         android:orientation="horizontal" >
 
