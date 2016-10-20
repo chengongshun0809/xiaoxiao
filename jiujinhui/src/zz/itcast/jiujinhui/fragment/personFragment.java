@@ -123,8 +123,21 @@ public class personFragment extends BaseFragment {
 			startActivity(intent3);
 			break;
 		case R.id.tixian:// 点击提现
-			Intent intent4 = new Intent(getActivity(), MyTiXianActivity.class);
-			startActivity(intent4);
+			sp.edit().putBoolean("recharge", firstClick_recharge).commit();
+			 firstClick_recharge = sp.getBoolean("recharge", false);
+			if (firstClick_recharge) {
+				Intent intent8=new Intent(getActivity(),SmsNumberActivity.class);
+				intent8.putExtra("sms", "tixian");
+				startActivity(intent8);
+				//短信验证成功则跳转到提现页面
+				firstClick_recharge=false;
+				sp.edit().putBoolean("recharge", firstClick_recharge).commit();
+			}else {
+				Intent intent4 = new Intent(getActivity(), MyTiXianActivity.class);
+				startActivity(intent4);
+			}
+			
+			
 			break;
 
 		case R.id.recharge:// 点击充值
@@ -134,6 +147,7 @@ public class personFragment extends BaseFragment {
 			if (firstClick_recharge) {
 				//进入短信验证页面
 				Intent intent7=new Intent(getActivity(),SmsNumberActivity.class);
+				intent7.putExtra("sms", "recharge");
 				startActivity(intent7);
 				//短信验证成功则跳转到充值页面
 				firstClick_recharge=false;
