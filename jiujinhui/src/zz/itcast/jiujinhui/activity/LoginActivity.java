@@ -3,18 +3,14 @@ package zz.itcast.jiujinhui.activity;
 import java.util.Map;
 
 import zz.itcast.jiujinhui.R;
-import zz.itcast.jiujinhui.bean.UserBean;
-import zz.itcast.jiujinhui.fragment.personFragment;
 import zz.itcast.jiujinhui.res.Constants;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,12 +36,14 @@ public class LoginActivity extends BaseActivity {
 	private TextView tv__title;
 
 	@ViewInject(R.id.btn_weixin)
-	private Button btn_weixin;
+	private RelativeLayout btn_weixin;
 
 	@ViewInject(R.id.tv_back)
 	private ImageView tv_back;
 	private boolean isLogined;// �Ƿ��Ѿ���¼
-
+    //手机号登录
+	@ViewInject(R.id.phone_login)
+	private TextView phone_login;
 	@Override
 	public void initView() {
 		// TODO Auto-generated method stub
@@ -107,7 +105,7 @@ public class LoginActivity extends BaseActivity {
 
 		tv_back.setOnClickListener(this);
 		btn_weixin.setOnClickListener(this);
-
+		phone_login.setOnClickListener(this);
 	}
 
 	@Override
@@ -142,6 +140,12 @@ public class LoginActivity extends BaseActivity {
 			} else {
 				login(SHARE_MEDIA.WEIXIN);
 			}
+
+			break;
+		case R.id.phone_login:
+              Intent intent=new Intent(LoginActivity.this,PhoneNumberLoginActivity.class);
+              startActivity(intent);
+			
 
 			break;
 

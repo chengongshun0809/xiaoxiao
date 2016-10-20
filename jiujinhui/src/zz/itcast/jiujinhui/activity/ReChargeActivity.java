@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class ReChargeActivity extends BaseActivity {
 
@@ -49,12 +50,24 @@ public class ReChargeActivity extends BaseActivity {
 	@ViewInject(R.id.iv_drink_checked_sanwan)
 	private ImageView iv_drink_checked_sanwan;
 
+	@ViewInject(R.id.tv_back)
+	private ImageView tv_back;
+	@ViewInject(R.id.tv__title)
+	private TextView tv__title;
+	
 	@Override
 	public int getLayoutResID() {
 		// TODO Auto-generated method stub
 		return R.layout.recharge_activity;
 	}
-
+	@Override
+	public void initView() {
+		// TODO Auto-generated method stub
+		ViewUtils.inject(this);
+		tv__title.setText("充值");
+		tv__title.setTextSize(22);
+		
+	}
 	@Override
 	public void initData() {
 		// TODO Auto-generated method stub
@@ -70,13 +83,10 @@ public class ReChargeActivity extends BaseActivity {
 		wuqian.setOnClickListener(this);
 		yiwan.setOnClickListener(this);
 		sanwan.setOnClickListener(this);
+		tv_back.setOnClickListener(this);
 	}
 
-	@Override
-	public void initView() {
-		// TODO Auto-generated method stub
-		ViewUtils.inject(this);
-	}
+	
 
 	@OnClick(R.id.paytype_of_weixin)
 	public void wx(View v) {
@@ -177,6 +187,9 @@ public class ReChargeActivity extends BaseActivity {
 			iv_drink_checked_yiwan.setVisibility(v.GONE);
 			iv_drink_checked_sanwan.setVisibility(v.VISIBLE);
 
+			break;
+		case R.id.tv_back:
+			finish();
 			break;
 
 		default:
