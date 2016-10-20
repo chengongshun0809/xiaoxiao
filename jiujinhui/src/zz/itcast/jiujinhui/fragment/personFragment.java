@@ -9,35 +9,23 @@ import java.security.PublicKey;
 
 import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.activity.DrinkRecordActivity;
-import zz.itcast.jiujinhui.activity.LoginActivity;
 import zz.itcast.jiujinhui.activity.MyTiXianActivity;
 import zz.itcast.jiujinhui.activity.PerInfoActivity;
 import zz.itcast.jiujinhui.activity.ReChargeActivity;
+import zz.itcast.jiujinhui.activity.SmsNumberActivity;
 import zz.itcast.jiujinhui.activity.TiXianRecordActivity;
 import zz.itcast.jiujinhui.activity.TradeRecordActivity;
 import zz.itcast.jiujinhui.activity.ZongZiChanActivity;
-import zz.itcast.jiujinhui.bean.UserBean;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.UrlConnectionDownloader;
 
 public class personFragment extends BaseFragment {
 	@ViewInject(R.id.tv_back)
@@ -107,6 +95,8 @@ public class personFragment extends BaseFragment {
 		recharge.setOnClickListener(this);
 		personInfo.setOnClickListener(this);
 	}
+  //记录充值按钮是否是第一次点击
+	private Boolean firstClick_recharge=true;
 
 	@Override
 	public void onClick(View v) {
@@ -138,8 +128,24 @@ public class personFragment extends BaseFragment {
 			break;
 
 		case R.id.recharge:// 点击充值
-			Intent intent5 = new Intent(getActivity(), ReChargeActivity.class);
-			startActivity(intent5);
+			//如果第一次进入则进短信验证页面
+			sp.edit().putBoolean("recharge", firstClick_recharge).commit();
+			 firstClick_recharge = sp.getBoolean("recharge", false);
+			if (firstClick_recharge) {
+				//进入短信验证页面
+				Intent intent7=new Intent(getActivity(),SmsNumberActivity.class);
+				startActivity(intent7);
+				//短信验证成功则跳转到充值页面
+				firstClick_recharge=false;
+				sp.edit().putBoolean("recharge", firstClick_recharge).commit();
+				
+			}else {
+				Intent intent5 = new Intent(getActivity(), ReChargeActivity.class);
+				startActivity(intent5);
+			}
+			
+			
+			
 			break;
 		case R.id.personInfo:// 进入个人信息页面
 

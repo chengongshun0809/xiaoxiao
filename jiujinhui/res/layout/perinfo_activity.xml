@@ -99,10 +99,10 @@
         android:id="@+id/tuichu"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="18dp"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="22dp"
         android:layout_marginTop="10dp"
-        android:background="#ff0000" >
+        android:background="@drawable/btn_person_shape_corners" >
 
         <TextView
             android:layout_width="wrap_content"

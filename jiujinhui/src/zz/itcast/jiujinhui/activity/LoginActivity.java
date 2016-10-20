@@ -78,7 +78,7 @@ public class LoginActivity extends BaseActivity {
 		// 添加微信平台
 		UMWXHandler wxHandler = new UMWXHandler(LoginActivity.this, appId,
 				appSecret);
-		wxHandler.setRefreshTokenAvailable(true);
+		wxHandler.setRefreshTokenAvailable(false);
 		wxHandler.addToSocialSDK();
 
 	}

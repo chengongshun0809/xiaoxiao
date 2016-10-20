@@ -1,5 +1,6 @@
 package zz.itcast.jiujinhui.activity;
 
+import net.tsz.afinal.FinalActivity;
 import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.res.Constants;
 import android.app.AlertDialog;
@@ -23,10 +24,10 @@ import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.SocializeClientListener;
 
 public class PerInfoActivity extends BaseActivity {
+	// 整个平台的Controller,负责管理整个SDK的配置、操作等处理
+	private UMSocialService mController = UMServiceFactory
+			.getUMSocialService(Constants.DESCRIPTOR);
 
-
-
-	
 	@ViewInject(R.id.tuichu)
 	private RelativeLayout tuichu;
 	private SharedPreferences sp;
@@ -55,7 +56,7 @@ public class PerInfoActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		tuichu.setOnClickListener(this);
 		tv_back.setOnClickListener(this);
-		
+
 	}
 
 	@Override
@@ -77,22 +78,16 @@ public class PerInfoActivity extends BaseActivity {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
-									/*
-									 * Intent intent6 = new
-									 * Intent(PerInfoActivity.this,
-									 * LoginActivity.class);
-									 * intent6.putExtra("shun", "shun");
-									 * startActivityForResult(intent6, 5);
-									 * PerInfoActivity.this.finish();
-									 */
+
 									if ("shun".equals(isshun)) {
 										setResult(200);
 									}
 									sp.edit().putBoolean("isLogined", false)
 											.commit();
-									
+
 									finish();
+									logout(SHARE_MEDIA.WEIXIN);// 注销微信授权
+
 								}
 							})
 					.setPositiveButton("取消",
@@ -112,15 +107,35 @@ public class PerInfoActivity extends BaseActivity {
 		case R.id.tv_back:
 			finish();
 			break;
-		
-			
-			
+
 		default:
 			break;
 		}
 
 	}
 
-	
+	protected void logout(final SHARE_MEDIA platform) {
+		// TODO Auto-generated method stub
+		mController.deleteOauth(PerInfoActivity.this, platform,
+				new SocializeClientListener() {
+
+					@Override
+					public void onStart() {
+
+					}
+
+					@Override
+					public void onComplete(int status, SocializeEntity entity) {
+						String showText = "解除" + platform.toString() + "平台授权成功";
+						if (status != StatusCode.ST_CODE_SUCCESSED) {
+							showText = "解除" + platform.toString() + "平台授权失败["
+									+ status + "]";
+						}
+						Toast.makeText(PerInfoActivity.this, showText,
+								Toast.LENGTH_SHORT).show();
+					}
+				});
+
+	}
 
 }
