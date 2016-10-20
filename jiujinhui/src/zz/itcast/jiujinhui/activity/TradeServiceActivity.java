@@ -10,6 +10,7 @@ import zz.itcast.jiujinhui.fragment.SaleChartFragment;
 import zz.itcast.jiujinhui.res.Arith;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +49,12 @@ public class TradeServiceActivity extends BaseActivity {
 	// 转让
 	@ViewInject(R.id.rb_zhuanrang_service)
 	private RadioButton rb_zhuanrang_service;
-
+    //个人资产
+	@ViewInject(R.id.person_assets)
+	private RelativeLayout person_assets;
+	
+	
+	
 	// 交易曲线
 	@ViewInject(R.id.tabs)
 	private PagerSlidingTabStrip tabs;
@@ -85,6 +92,8 @@ public class TradeServiceActivity extends BaseActivity {
 		rb_sale_service.setOnClickListener(this);
 		rb_tihuo_service.setOnClickListener(this);
 		rb_zhuanrang_service.setOnClickListener(this);
+		person_assets.setOnClickListener(this);
+		
 
 	}
 
@@ -248,7 +257,13 @@ public class TradeServiceActivity extends BaseActivity {
 		case R.id.rb_zhuanrang_service:
             shouTransDialog();
 			break;
-
+			//个人资产
+		case R.id.person_assets:
+			Intent intent=new Intent(TradeServiceActivity.this,TradeRecordActivity.class);
+			startActivity(intent);
+			
+			break;
+		
 		default:
 			break;
 		}
