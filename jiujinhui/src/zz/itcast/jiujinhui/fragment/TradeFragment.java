@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zz.itcast.jiujinhui.R;
+import zz.itcast.jiujinhui.activity.KnowDetailActivity;
 import zz.itcast.jiujinhui.activity.TradeServiceActivity;
 import android.content.Intent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,9 +28,13 @@ public class TradeFragment extends BaseFragment {
 	@ViewInject(R.id.LongTan)
 	private RelativeLayout LongTan;
 	@ViewInject(R.id.viewPager_menu)
+	
 	//主页轮播图
 	private zz.itcast.jiujinhui.view.AbSlidingPlayView viewPager;
-
+    //了解详情
+	@ViewInject(R.id.know_detail)
+	private RelativeLayout know_detail;
+	
 	// 首页轮播的界面
 	private List<ImageView> imageList;
 
@@ -87,6 +93,7 @@ public class TradeFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		rengou.setOnClickListener(this);
 		LongTan.setOnClickListener(this);
+		know_detail.setOnClickListener(this);
 	}
 
 	@Override
@@ -111,6 +118,12 @@ public class TradeFragment extends BaseFragment {
 					TradeServiceActivity.class);
 			startActivity(intent1);
 
+			break;
+		case R.id.know_detail:
+			Intent intent=new Intent(getActivity(),KnowDetailActivity.class);
+			startActivity(intent);
+			
+			
 			break;
 
 		default:

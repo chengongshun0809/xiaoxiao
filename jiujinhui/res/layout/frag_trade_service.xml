@@ -10,8 +10,7 @@
     <zz.itcast.jiujinhui.view.MyScrollView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-         >
+        android:layout_weight="1" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,8 +43,8 @@
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="fill_parent"
+                        android:layout_weight="1"
                         android:orientation="vertical" >
 
                         <RelativeLayout
@@ -84,9 +83,9 @@
                         android:background="#ffffff" />
 
                     <LinearLayout
-                       android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="fill_parent"
+                        android:layout_weight="1"
                         android:orientation="vertical" >
 
                         <RelativeLayout
@@ -123,10 +122,9 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="2dp"
                 android:background="@color/igray" />
-       
+
             <RelativeLayout
-                
-               android:id="@+id/person_assets"
+                android:id="@+id/person_assets"
                 android:layout_width="fill_parent"
                 android:layout_height="30dp"
                 android:background="#00000000" >
@@ -713,50 +711,95 @@
         </LinearLayout>
     </zz.itcast.jiujinhui.view.MyScrollView>
 
-    <RelativeLayout
-        android:id="@+id/rl_tab_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#f5f5f5"
+        android:orientation="horizontal" >
 
-        <RadioGroup
-            android:id="@+id/radiogroup"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom"
-            android:background="#f5f5f5"
-            android:orientation="horizontal"
-            android:weightSum="4" >
+        <LinearLayout
+            android:id="@+id/rb_buy_service"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
 
-            <RadioButton
-                android:id="@+id/rb_buy_service"
-                style="@style/tab_style"
-                android:layout_height="match_parent"
-                android:drawableTop="@drawable/bar_home_normal"
+            <ImageView
+               
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bar_buy" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="买入"
                 android:textSize="11sp" />
+      </LinearLayout>
+            <LinearLayout
+            android:id="@+id/rb_sale_service"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
 
-            <RadioButton
-                android:id="@+id/rb_sale_service"
-                style="@style/tab_style"
-                android:layout_height="match_parent"
-                android:drawableTop="@drawable/bar_home_normal"
+            <ImageView
+              
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bar_sale" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="卖出"
                 android:textSize="11sp" />
+      </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/rb_tihuo_service"
-                style="@style/tab_style"
-                android:layout_height="match_parent"
-                android:drawableTop="@drawable/bar_home_normal"
+             <LinearLayout
+            android:id="@+id/rb_tihuo_service"
+            android:layout_width="dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+              
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bar_tihuo" />
+
+            <TextView
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="提货"
                 android:textSize="11sp" />
-             <RadioButton
-                android:id="@+id/rb_zhuanrang_service"
-                style="@style/tab_style"
-                android:layout_height="match_parent"
-                android:drawableTop="@drawable/bar_home_normal"
+      </LinearLayout>
+        <LinearLayout
+            android:id="@+id/rb_zhuanrang_service"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bar_trans" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="转让"
                 android:textSize="11sp" />
-        </RadioGroup>
-    </RelativeLayout>
-</LinearLayout>
+      </LinearLayout>
+
+            </LinearLayout>
+         
+        </LinearLayout>

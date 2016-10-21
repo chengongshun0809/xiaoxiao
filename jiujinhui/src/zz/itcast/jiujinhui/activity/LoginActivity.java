@@ -112,21 +112,8 @@ public class LoginActivity extends BaseActivity {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		/*
-		 * case R.id.btn_regiest:// ע�� Intent intent1 = new Intent(this,
-		 * RegisterActivity.class); startActivity(intent1); break;
-		 */
-		/*
-		 * case R.id.btn_login:// �
-		 * 
-		 * if ("happy".equals(ishappy)) { setResult(200); }
-		 * 
-		 * sp.edit().putBoolean("isLogined", true).commit(); finish(); break;
-		 */
-		/*
-		 * case R.id.forget:// ������� Intent intent3 = new Intent(this,
-		 * ForgetPwdActivity.class); startActivity(intent3); break;
-		 */
+
+	
 		case R.id.tv_back:
 
 			finish();

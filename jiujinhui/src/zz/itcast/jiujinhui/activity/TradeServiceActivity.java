@@ -38,17 +38,17 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 public class TradeServiceActivity extends BaseActivity {
 	// 买入
 	@ViewInject(R.id.rb_buy_service)
-	private RadioButton rb_buy_service;
+	private LinearLayout rb_buy_service;
 	// 卖出
 	@ViewInject(R.id.rb_sale_service)
-	private RadioButton rb_sale_service;
+	private LinearLayout rb_sale_service;
 
 	// 提货
 	@ViewInject(R.id.rb_tihuo_service)
-	private RadioButton rb_tihuo_service;
+	private LinearLayout rb_tihuo_service;
 	// 转让
 	@ViewInject(R.id.rb_zhuanrang_service)
-	private RadioButton rb_zhuanrang_service;
+	private LinearLayout rb_zhuanrang_service;
     //个人资产
 	@ViewInject(R.id.person_assets)
 	private RelativeLayout person_assets;
@@ -475,10 +475,10 @@ public class TradeServiceActivity extends BaseActivity {
 
 		dialog_ok = (Button) view.findViewById(R.id.dialog_ok);
 		diaog_cancel = (Button) view.findViewById(R.id.dialog_cancel);
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setView(view);
+		final AlertDialog builder = new AlertDialog.Builder(this).create();
+		builder.setView(view,0,0,0,0);
 		builder.setCancelable(false);
-		dialog2 = builder.show();
+		builder.show();
 		
 	      
 		
@@ -489,7 +489,7 @@ public class TradeServiceActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				dialog2.dismiss();
+				builder.dismiss();
 				count_buy=1;
 			}
 		});
