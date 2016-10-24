@@ -79,7 +79,9 @@
             android:id="@+id/iv_hf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/phone" />
+            android:src="@drawable/total_assats"
+            android:layout_marginTop="5dp"
+             />
 
         <TextView
             android:layout_gravity="center_vertical"
@@ -115,7 +117,9 @@
             android:id="@+id/iv_hf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/phone" />
+            android:src="@drawable/jiubi_recrod"
+            android:layout_marginTop="5dp"
+             />
 
         <TextView
             android:layout_gravity="center_vertical"
@@ -151,7 +155,9 @@
             android:id="@+id/iv_hf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/phone" />
+            android:src="@drawable/trade_recrod"
+            android:layout_marginTop="5dp"
+             />
 
         <TextView
             android:layout_gravity="center_vertical"
@@ -183,11 +189,14 @@
         android:orientation="horizontal"
         android:padding="10dp" >
 
-        <ImageView
+         <ImageView
             android:id="@+id/iv_hf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/phone" />
+            android:src="@drawable/tixian_recrod" 
+            android:layout_marginTop="5dp"
+            />
+
 
         <TextView
             android:layout_gravity="center_vertical"

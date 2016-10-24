@@ -6,6 +6,14 @@
     android:orientation="vertical" >
 
     <include layout="@layout/layout_base_title" />
+   
+     <zz.itcast.jiujinhui.view.MyScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
     
     <LinearLayout
         android:id="@+id/personInfo"
@@ -250,24 +258,6 @@
         android:layout_height="1dp"
         android:background="@color/igray" />
 
-    <!--
-    <RelativeLayout
-        android:id="@+id/tuichu"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="18dp"
-        android:layout_marginTop="10dp"
-        android:background="#ff0000" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="退出"
-            android:textColor="#ffffff"
-            android:textSize="20sp" />
-    </RelativeLayout>
-    -->
-
+     </LinearLayout>
+     </zz.itcast.jiujinhui.view.MyScrollView>
 </LinearLayout>

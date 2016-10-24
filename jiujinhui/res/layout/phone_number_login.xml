@@ -19,7 +19,7 @@
             android:layout_width="23.0dip"
             android:layout_height="23.0dip"
             android:layout_centerVertical="true"
-            android:src="@drawable/phone" />
+            android:src="@drawable/phone_user" />
 
         <EditText
             android:layout_marginTop="12dp"
@@ -48,7 +48,7 @@
             android:layout_width="23.0dip"
             android:layout_height="23.0dip"
             android:layout_centerVertical="true"
-            android:src="@drawable/phone" />
+            android:src="@drawable/password" />
 
         <EditText
             android:id="@+id/phone_password"

@@ -1,12 +1,5 @@
 package zz.itcast.jiujinhui.fragment;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.PublicKey;
-
 import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.activity.DrinkRecordActivity;
 import zz.itcast.jiujinhui.activity.MyTiXianActivity;
@@ -16,6 +9,7 @@ import zz.itcast.jiujinhui.activity.SmsNumberActivity;
 import zz.itcast.jiujinhui.activity.TiXianRecordActivity;
 import zz.itcast.jiujinhui.activity.TradeRecordActivity;
 import zz.itcast.jiujinhui.activity.ZongZiChanActivity;
+import zz.itcast.jiujinhui.res.Constants;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
@@ -23,9 +17,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.squareup.picasso.Picasso;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.weixin.controller.UMWXHandler;
+import com.umeng.socialize.weixin.media.CircleShareContent;
+import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 public class personFragment extends BaseFragment {
 	@ViewInject(R.id.tv_back)
@@ -48,36 +50,34 @@ public class personFragment extends BaseFragment {
 	private LinearLayout personInfo;
 	@ViewInject(R.id.NickName)
 	private TextView NickName;
-
+	
 	// 圆形图片
 	@ViewInject(R.id.circleImabeView)
 	private zz.itcast.jiujinhui.view.CircleImageView circleImabeView;
 
 	private SharedPreferences sp;
-	
+
+
 	@Override
 	public void initView(View view) {
 		// TODO Auto-generated method stub
 		ViewUtils.inject(this, view);
 		tv_back.setVisibility(view.GONE);
 		tv__title.setText("个人中心");
-		//微信头像
+		// 微信头像
 		sp = getActivity().getSharedPreferences("user", 0);
-        String headimgurl = sp.getString("headimg", null);
-		Picasso.with(getActivity())
-				.load(headimgurl)
-				.into(circleImabeView);
-        //微信昵称
-               	String nickNameString=sp.getString("nickname", null);	
-		           NickName.setText(nickNameString);
+		String headimgurl = sp.getString("headimg", null);
+		Picasso.with(getActivity()).load(headimgurl).into(circleImabeView);
+		// 微信昵称
+		String nickNameString = sp.getString("nickname", null);
+		NickName.setText(nickNameString);
 	}
-	
 
 	@Override
 	public void initData() {
-		// TODO Auto-generated method stub
 		
 	}
+
 
 	@Override
 	public int getLayoutResID() {
@@ -94,9 +94,12 @@ public class personFragment extends BaseFragment {
 		tixian.setOnClickListener(this);
 		recharge.setOnClickListener(this);
 		personInfo.setOnClickListener(this);
+		
+
 	}
-  //记录充值按钮是否是第一次点击
-	private Boolean firstClick_recharge=true;
+
+	// 记录充值按钮是否是第一次点击
+	private Boolean firstClick_recharge = true;
 
 	@Override
 	public void onClick(View v) {
@@ -124,72 +127,52 @@ public class personFragment extends BaseFragment {
 			break;
 		case R.id.tixian:// 点击提现
 			sp.edit().putBoolean("recharge", firstClick_recharge).commit();
-			 firstClick_recharge = sp.getBoolean("recharge", false);
+			firstClick_recharge = sp.getBoolean("recharge", false);
 			if (firstClick_recharge) {
-				Intent intent8=new Intent(getActivity(),SmsNumberActivity.class);
+				Intent intent8 = new Intent(getActivity(),
+						SmsNumberActivity.class);
 				intent8.putExtra("sms", "tixian");
 				startActivity(intent8);
-				//短信验证成功则跳转到提现页面
-				firstClick_recharge=false;
+				// 短信验证成功则跳转到提现页面
+				firstClick_recharge = false;
 				sp.edit().putBoolean("recharge", firstClick_recharge).commit();
-			}else {
-				Intent intent4 = new Intent(getActivity(), MyTiXianActivity.class);
+			} else {
+				Intent intent4 = new Intent(getActivity(),
+						MyTiXianActivity.class);
 				startActivity(intent4);
 			}
-			
-			
+
 			break;
 
 		case R.id.recharge:// 点击充值
-			//如果第一次进入则进短信验证页面
+			// 如果第一次进入则进短信验证页面
 			sp.edit().putBoolean("recharge", firstClick_recharge).commit();
-			 firstClick_recharge = sp.getBoolean("recharge", false);
+			firstClick_recharge = sp.getBoolean("recharge", false);
 			if (firstClick_recharge) {
-				//进入短信验证页面
-				Intent intent7=new Intent(getActivity(),SmsNumberActivity.class);
+				// 进入短信验证页面
+				Intent intent7 = new Intent(getActivity(),
+						SmsNumberActivity.class);
 				intent7.putExtra("sms", "recharge");
 				startActivity(intent7);
-				//短信验证成功则跳转到充值页面
-				firstClick_recharge=false;
+				// 短信验证成功则跳转到充值页面
+				firstClick_recharge = false;
 				sp.edit().putBoolean("recharge", firstClick_recharge).commit();
-				
-			}else {
-				Intent intent5 = new Intent(getActivity(), ReChargeActivity.class);
+
+			} else {
+				Intent intent5 = new Intent(getActivity(),
+						ReChargeActivity.class);
 				startActivity(intent5);
 			}
-			
-			
-			
+
 			break;
 		case R.id.personInfo:// 进入个人信息页面
-
-			/*
-			 * Dialog dialog = new AlertDialog.Builder(getActivity())
-			 * .setTitle("确认退出?") .setNegativeButton("确定", new
-			 * DialogInterface.OnClickListener() {
-			 * 
-			 * @Override public void onClick(DialogInterface dialog, int which)
-			 * { // TODO Auto-generated method stub
-			 * sp.edit().putBoolean("isLogined", false) .commit();
-			 * 
-			 * Intent intent6 = new Intent(getActivity(), LoginActivity.class);
-			 * intent6.putExtra("person", "person");
-			 * getActivity().startActivityForResult( intent6, 1);
-			 * 
-			 * } }) .setPositiveButton("取消", new
-			 * DialogInterface.OnClickListener() {
-			 * 
-			 * @Override public void onClick(DialogInterface dialog, int which)
-			 * { // TODO Auto-generated method stub dialog.dismiss(); }
-			 * }).create(); dialog.setCanceledOnTouchOutside(true);
-			 * dialog.show();
-			 */
 
 			Intent intent = new Intent(getActivity(), PerInfoActivity.class);
 			intent.putExtra("shun", "shun");
 			startActivityForResult(intent, 0);
 
 			break;
+		
 		default:
 			break;
 		}

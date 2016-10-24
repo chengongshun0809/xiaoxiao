@@ -726,7 +726,7 @@
             android:orientation="vertical" >
 
             <ImageView
-               
+               android:layout_marginTop="3dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/bar_buy" />
@@ -746,7 +746,7 @@
             android:orientation="vertical" >
 
             <ImageView
-              
+               android:layout_marginTop="3dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/bar_sale" />
@@ -767,7 +767,7 @@
             android:orientation="vertical" >
 
             <ImageView
-              
+               android:layout_marginTop="3dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/bar_tihuo" />
@@ -788,7 +788,7 @@
             android:orientation="vertical" >
 
             <ImageView
-                
+                 
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/bar_trans" />
