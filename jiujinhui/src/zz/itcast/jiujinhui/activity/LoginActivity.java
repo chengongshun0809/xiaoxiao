@@ -108,6 +108,7 @@ public class LoginActivity extends BaseActivity {
 				req.state="none";
 				api.sendReq(req);
 				
+				
 			}
 
 			break;

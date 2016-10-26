@@ -43,7 +43,10 @@
 
     <style name="SampleTheme.Light" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:windowNoTitle">true</item>
-    </style>
+    <item name="android:background">#00000000</item>  
+        
+        
+        </style>
 
     <style name="Theme.UMDialog" parent="android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>

@@ -116,6 +116,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 																	Toast.LENGTH_SHORT).show();
 															Intent intent = new Intent(WXEntryActivity.this,
 																	MainActivity.class);
+															
 															startActivity(intent);
 															
 															sp.edit().putBoolean("isLogined", true).commit();

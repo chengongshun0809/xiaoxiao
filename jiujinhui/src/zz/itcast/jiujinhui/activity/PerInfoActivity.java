@@ -1,13 +1,14 @@
 package zz.itcast.jiujinhui.activity;
 
-
 import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.res.Constants;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,9 +18,7 @@ import android.widget.Toast;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
-
 public class PerInfoActivity extends BaseActivity {
-	
 
 	@ViewInject(R.id.tuichu)
 	private RelativeLayout tuichu;
@@ -36,6 +35,9 @@ public class PerInfoActivity extends BaseActivity {
 	}
 
 	private String isshun;
+	private Dialog dialog;
+	private Button btnOK;
+	private Button btnCancel;
 
 	@Override
 	public void initData() {
@@ -63,37 +65,61 @@ public class PerInfoActivity extends BaseActivity {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.tuichu:
-			Dialog dialog = new AlertDialog.Builder(this)
-					.setTitle("确认退出?")
-					.setNegativeButton("确定",
-							new DialogInterface.OnClickListener() {
+			/*
+			 * Dialog dialog = new AlertDialog.Builder(this) .setTitle("确认退出?")
+			 * .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+			 * 
+			 * @Override public void onClick(DialogInterface dialog, int which)
+			 * {
+			 * 
+			 * if ("shun".equals(isshun)) { setResult(200); }
+			 * sp.edit().putBoolean("isLogined", false) .commit();
+			 * 
+			 * finish();
+			 * 
+			 * } }) .setPositiveButton("取消", new
+			 * DialogInterface.OnClickListener() {
+			 * 
+			 * @Override public void onClick(DialogInterface dialog, int which)
+			 * { // TODO Auto-generated method stub dialog.dismiss(); }
+			 * }).create(); dialog.setCanceledOnTouchOutside(true);
+			 * dialog.show();
+			 */
 
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
+			LayoutInflater inflater = LayoutInflater.from(this);
+			View view = (View) inflater.inflate(R.layout.person_info_tuichu,
+					null);
+			btnOK = (Button) view.findViewById(R.id.dialog_ok);
+			btnCancel = (Button) view.findViewById(R.id.dialog_cancel);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setView(view);
+			builder.setCancelable(false);
+			dialog = builder.show();
+			btnOK.setOnClickListener(new OnClickListener() {
 
-									if ("shun".equals(isshun)) {
-										setResult(200);
-									}
-									sp.edit().putBoolean("isLogined", false)
-											.commit();
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
 
-									finish();
-								
-								}
-							})
-					.setPositiveButton("取消",
-							new DialogInterface.OnClickListener() {
+					if ("shun".equals(isshun)) {
+						setResult(200);
+					}
+					sp.edit().putBoolean("isLogined", false).commit();
 
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method stub
-									dialog.dismiss();
-								}
-							}).create();
-			dialog.setCanceledOnTouchOutside(true);
-			dialog.show();
+					finish();
+
+				}
+			});
+
+			// 取消
+			btnCancel.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+				}
+			});
 
 			break;
 		case R.id.tv_back:
@@ -105,7 +131,5 @@ public class PerInfoActivity extends BaseActivity {
 		}
 
 	}
-
-	
 
 }

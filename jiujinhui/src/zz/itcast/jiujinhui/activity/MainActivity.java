@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -143,7 +144,6 @@ public class MainActivity extends BaseActivity {
 	private long secondTime;
 	private long firstTime;
 	
-
 	/**
 	 * 点击两次返回键退出应用
 	 */
@@ -160,6 +160,7 @@ public class MainActivity extends BaseActivity {
 				secondTime = System.currentTimeMillis();
 				if (secondTime - firstTime < 2000) {
 					// 两次点击时间间隔小于2s
+					
 					finish();
 				} else {
 					// 两次点击时间间隔大于2s
