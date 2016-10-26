@@ -96,6 +96,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 											int errcode=object.getInt("errcode");
 											if (errcode==0) {//说明access_token是有效的
 												String urlString="https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid + "&lang=zh_CN";
+												
+												
 												HttpUtils httpUtils=new HttpUtils();
 												httpUtils.send(HttpRequest.HttpMethod.GET, urlString, new RequestCallBack<String>() {
 
@@ -115,6 +117,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 															Intent intent = new Intent(WXEntryActivity.this,
 																	MainActivity.class);
 															startActivity(intent);
+															
 															sp.edit().putBoolean("isLogined", true).commit();
 															//用户微信头像
 															sp.edit().putString("headimg", headimgurl).commit();

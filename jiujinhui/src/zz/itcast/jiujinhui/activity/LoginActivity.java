@@ -38,8 +38,7 @@ public class LoginActivity extends BaseActivity {
 		ViewUtils.inject(this);
 		sp = getSharedPreferences("user", MODE_PRIVATE);
 		tv__title.setText("登录");
-		// 添加微信、微信朋友圈平台
-		addWXPlatform();
+		
 
 	}
 
@@ -54,16 +53,6 @@ public class LoginActivity extends BaseActivity {
 		return sIsWXAppInstalledAndSupported;
 	}
 
-	// 添加微信、微信朋友圈平台
-	private void addWXPlatform() {
-		// TODO Auto-generated method stub
-		// 注意：在微信授权的时候，必须传递appSecret
-		// wx967daebe835fbeac是你在微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
-		String appId = "wxdb59e14854a747c8";
-		String appSecret = "110c41c7c74c9074d8e41a0399466e10";
-		
-
-	}
 
 	@Override
 	public int getLayoutResID() {
