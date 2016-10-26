@@ -1,13 +1,9 @@
 package zz.itcast.jiujinhui.activity;
 
-import java.util.Map;
-
 import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.res.Constants;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,21 +13,13 @@ import android.widget.Toast;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.SendAuth;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.controller.UMServiceFactory;
-import com.umeng.socialize.controller.UMSocialService;
-import com.umeng.socialize.controller.listener.SocializeListeners.UMAuthListener;
-import com.umeng.socialize.controller.listener.SocializeListeners.UMDataListener;
-import com.umeng.socialize.exception.SocializeException;
-import com.umeng.socialize.weixin.controller.UMWXHandler;
+
 
 public class LoginActivity extends BaseActivity {
 
-	// 整个平台的Controller,负责管理整个SDK的配置、操作等处理
-	private UMSocialService mController = UMServiceFactory
-			.getUMSocialService(Constants.DESCRIPTOR);
-
+	
 	@ViewInject(R.id.tv__title)
 	private TextView tv__title;
 
@@ -73,11 +61,7 @@ public class LoginActivity extends BaseActivity {
 		// wx967daebe835fbeac是你在微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
 		String appId = "wxdb59e14854a747c8";
 		String appSecret = "110c41c7c74c9074d8e41a0399466e10";
-		// 添加微信平台
-		UMWXHandler wxHandler = new UMWXHandler(LoginActivity.this, appId,
-				appSecret);
-		wxHandler.setRefreshTokenAvailable(false);
-		wxHandler.addToSocialSDK();
+		
 
 	}
 
@@ -91,12 +75,16 @@ public class LoginActivity extends BaseActivity {
 
 	private SharedPreferences sp;
 
+	private IWXAPI api;
+
 	@Override
 	public void initData() {
 		// TODO Auto-generated method stub
 
 		ishappy = getIntent().getStringExtra("happy");
-
+   
+		api = WXAPIFactory.createWXAPI(this, Constants.APP_ID, true);
+		api.registerApp(Constants.APP_ID);
 	}
 
 	@Override
@@ -125,7 +113,12 @@ public class LoginActivity extends BaseActivity {
 				Toast.makeText(LoginActivity.this, "未安装微信客户端，请您先安装",
 						Toast.LENGTH_SHORT).show();
 			} else {
-				login(SHARE_MEDIA.WEIXIN);
+				//微信登录
+				SendAuth.Req req=new SendAuth.Req();
+				req.scope="snsapi_userinfo";
+				req.state="none";
+				api.sendReq(req);
+				
 			}
 
 			break;
@@ -142,98 +135,11 @@ public class LoginActivity extends BaseActivity {
 
 	}
 
-	/**
-	 * 授权。如果授权成功，则获取用户信息
-	 * 
-	 * @param platform
-	 */
-	private void login(SHARE_MEDIA platform) {
-		mController.doOauthVerify(LoginActivity.this, platform,
-				new UMAuthListener() {
 
-					@Override
-					public void onStart(SHARE_MEDIA platform) {
-						Toast.makeText(LoginActivity.this, "授权开始",
-								Toast.LENGTH_SHORT).show();
-					}
 
-					@Override
-					public void onError(SocializeException e,
-							SHARE_MEDIA platform) {
-						Toast.makeText(LoginActivity.this, "授权失败",
-								Toast.LENGTH_SHORT).show();
-					}
+	
 
-					@Override
-					public void onComplete(Bundle value, SHARE_MEDIA platform) {
-						// 获取uid
-						String uid = value.getString("uid");
-						if (!TextUtils.isEmpty(uid)) {
-							// uid不为空，获取用户信息
-							getUserInfo(platform);
-
-							Toast.makeText(LoginActivity.this, "登录成功",
-									Toast.LENGTH_SHORT).show();
-							Intent intent = new Intent(LoginActivity.this,
-									MainActivity.class);
-							startActivity(intent);
-							sp.edit().putBoolean("isLogined", true).commit();
-							finish();
-
-						} else {
-							Toast.makeText(LoginActivity.this, "授权失败...",
-									Toast.LENGTH_LONG).show();
-						}
-
-					}
-
-					@Override
-					public void onCancel(SHARE_MEDIA platform) {
-						Toast.makeText(LoginActivity.this, "授权取消",
-								Toast.LENGTH_SHORT).show();
-
-					}
-				});
-
-	}
-
-	/**
-	 * 获取用户信息
-	 * 
-	 * @param platform
-	 */
-	private void getUserInfo(SHARE_MEDIA platform) {
-		mController.getPlatformInfo(LoginActivity.this, platform,
-				new UMDataListener() {
-
-					@Override
-					public void onStart() {
-
-					}
-
-					@Override
-					public void onComplete(int status, Map<String, Object> info) {
-						// String showText = "";
-						// if (status == StatusCode.ST_CODE_SUCCESSED) {
-						// showText = "用户名：" +
-						// info.get("screen_name").toString();
-						// Log.d("#########", "##########" + info.toString());
-						// } else {
-						// showText = "获取用户信息失败";
-						// }
-
-						if (info != null) {
-							Toast.makeText(LoginActivity.this, info.toString(),
-									Toast.LENGTH_SHORT).show();
-							//用户微信头像
-							sp.edit().putString("headimg", (String) info.get("headimgurl")).commit();
-						     //用户微信昵称
-							sp.edit().putString("nickname", (String) info.get("nickname")).commit();
-						
-						}
-					}
-				});
-	}
+	
 
 	@Override
 	protected void onDestroy() {
