@@ -107,7 +107,7 @@ public class LoginActivity extends BaseActivity {
 				req.scope="snsapi_userinfo";
 				req.state="none";
 				api.sendReq(req);
-				
+				finish();
 				
 			}
 

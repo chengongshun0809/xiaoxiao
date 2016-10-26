@@ -88,15 +88,12 @@ public class MainActivity extends BaseActivity {
 					break;
 				case R.id.rb_person:
 					currentItem = 1;// ��������
-					
-					
-					
+
 					break;
 				case R.id.rb_help:
 					currentItem = 2;// ��������
 					break;
-				
-                 
+
 				default:
 					break;
 				}
@@ -107,21 +104,33 @@ public class MainActivity extends BaseActivity {
 					boolean isLogined = sp.getBoolean("isLogined", false);
 					if (isLogined == false) {
 						// û�е�¼
-					/*	Intent intent = new Intent(MainActivity.this,
+						/*
+						 * Intent intent = new Intent(MainActivity.this,
+						 * LoginActivity.class); intent.putExtra("person",
+						 * "person"); startActivityForResult(intent, 0);
+						 * radiogroup.check(R.id.rb_trade);
+						 */
+						// fm.beginTransaction().replace(R.id.fl, new
+						// NoLoginPersonFragment()).commit();
+						Intent intent = new Intent(MainActivity.this,
 								LoginActivity.class);
-						intent.putExtra("person", "person");
-						startActivityForResult(intent, 0);
-						radiogroup.check(R.id.rb_trade);*/
-                      fm.beginTransaction().replace(R.id.fl, new NoLoginPersonFragment()).commit();
-						
+						startActivity(intent);
+						radiogroup.check(R.id.rb_trade);
+						fm.beginTransaction()
+								.replace(R.id.fl, fragments.get(0)).commit();
 						return;
+					}else {
+						radiogroup.check(R.id.rb_person);
+						fm.beginTransaction()
+								.replace(R.id.fl, fragments.get(1)).commit();
 					}
 
+				} else {
+
+					fm.beginTransaction()
+							.replace(R.id.fl, fragments.get(currentItem))
+							.commit();
 				}
-
-				fm.beginTransaction()
-						.replace(R.id.fl, fragments.get(currentItem)).commit();
-
 			}
 		});
 
