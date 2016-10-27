@@ -115,6 +115,7 @@ public class MainActivity extends BaseActivity {
 						Intent intent = new Intent(MainActivity.this,
 								LoginActivity.class);
 						startActivity(intent);
+						
 						radiogroup.check(R.id.rb_trade);
 						fm.beginTransaction()
 								.replace(R.id.fl, fragments.get(0)).commit();

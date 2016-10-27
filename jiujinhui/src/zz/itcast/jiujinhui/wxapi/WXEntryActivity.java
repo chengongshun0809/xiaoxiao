@@ -114,11 +114,11 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 															Log.e("ms", nickname+"  "+headimgurl);
 															Toast.makeText(WXEntryActivity.this, "登录成功",
 																	Toast.LENGTH_SHORT).show();
-															Intent intent = new Intent(WXEntryActivity.this,
+															/*Intent intent = new Intent(WXEntryActivity.this,
 																	MainActivity.class);
 															
-															startActivity(intent);
-															
+															startActivity(intent);*/
+															finish();
 															sp.edit().putBoolean("isLogined", true).commit();
 															//用户微信头像
 															sp.edit().putString("headimg", headimgurl).commit();
