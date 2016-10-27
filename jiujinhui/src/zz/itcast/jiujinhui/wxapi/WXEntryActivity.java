@@ -3,6 +3,7 @@ package zz.itcast.jiujinhui.wxapi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import zz.itcast.jiujinhui.activity.LoginActivity;
 import zz.itcast.jiujinhui.activity.MainActivity;
 import zz.itcast.jiujinhui.res.Constants;
 import android.app.Activity;
@@ -49,7 +50,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 			
 			
 			String code1 = ((SendAuth.Resp) resp).token; // 即为所需的code
-			Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show();
 			// 拿到code,加上appid和secret拼接网址,请求数据得到包含token和openid来继续请求拿到用户数据
 			String urlstr = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="
 					+ Constants.APP_ID
@@ -97,7 +98,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 											if (errcode==0) {//说明access_token是有效的
 												String urlString="https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid + "&lang=zh_CN";
 												
-												
+												Toast.makeText(WXEntryActivity.this, "登录成功",
+														Toast.LENGTH_SHORT).show();
 												HttpUtils httpUtils=new HttpUtils();
 												httpUtils.send(HttpRequest.HttpMethod.GET, urlString, new RequestCallBack<String>() {
 
@@ -105,6 +107,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 													public void onSuccess(
 															ResponseInfo<String> responseInfo) {
 														// TODO Auto-generated method stub
+														
 														try {
 															JSONObject json=new JSONObject(responseInfo.result.toString());
 															//拿到昵称和头像
@@ -112,12 +115,12 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 	                                                            String headimgurl = json.getString("headimgurl");//头像
 														
 															Log.e("ms", nickname+"  "+headimgurl);
-															Toast.makeText(WXEntryActivity.this, "登录成功",
-																	Toast.LENGTH_SHORT).show();
+															
 															/*Intent intent = new Intent(WXEntryActivity.this,
 																	MainActivity.class);
 															
 															startActivity(intent);*/
+															
 															finish();
 															sp.edit().putBoolean("isLogined", true).commit();
 															//用户微信头像

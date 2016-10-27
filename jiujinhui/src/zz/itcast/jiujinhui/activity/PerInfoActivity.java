@@ -35,7 +35,7 @@ public class PerInfoActivity extends BaseActivity {
 	}
 
 	private String isshun;
-	private Dialog dialog;
+	
 	private Button btnOK;
 	private Button btnCancel;
 
@@ -91,10 +91,10 @@ public class PerInfoActivity extends BaseActivity {
 					null);
 			btnOK = (Button) view.findViewById(R.id.dialog_ok);
 			btnCancel = (Button) view.findViewById(R.id.dialog_cancel);
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			final AlertDialog builder = new AlertDialog.Builder(this).create();
 			builder.setView(view);
 			builder.setCancelable(false);
-			dialog = builder.show();
+			builder.show();
 			btnOK.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -105,9 +105,9 @@ public class PerInfoActivity extends BaseActivity {
 						setResult(200);
 					}
 					sp.edit().putBoolean("isLogined", false).commit();
-
+					builder.dismiss();
 					finish();
-
+					
 				}
 			});
 
@@ -117,7 +117,7 @@ public class PerInfoActivity extends BaseActivity {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					dialog.dismiss();
+					builder.dismiss();
 				}
 			});
 

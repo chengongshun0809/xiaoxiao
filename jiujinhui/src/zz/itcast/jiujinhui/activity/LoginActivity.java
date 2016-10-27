@@ -2,6 +2,7 @@ package zz.itcast.jiujinhui.activity;
 
 import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.res.Constants;
+import zz.itcast.jiujinhui.wxapi.WXEntryActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
@@ -37,7 +38,7 @@ public class LoginActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		ViewUtils.inject(this);
 		sp = getSharedPreferences("user", MODE_PRIVATE);
-		tv__title.setText("登录");
+		//tv__title.setText("登录");
 		
 
 	}
@@ -108,6 +109,7 @@ public class LoginActivity extends BaseActivity {
 				req.state="none";
 				api.sendReq(req);
 				finish();
+				
 				
 			}
 
