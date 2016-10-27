@@ -138,7 +138,8 @@ public class personFragment extends BaseFragment {
 			break;
 
 		case R.id.recharge:// 点击充值
-			// 如果第一次进入则进短信验证页面
+			// TODO
+			//如果第一次进入则进短信验证页面
 			sp.edit().putBoolean("recharge", firstClick_recharge).commit();
 			firstClick_recharge = sp.getBoolean("recharge", false);
 			if (firstClick_recharge) {

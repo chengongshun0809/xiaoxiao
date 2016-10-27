@@ -1,28 +1,17 @@
 package zz.itcast.jiujinhui.fragment;
 
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.activity.KnowDetailActivity;
 import zz.itcast.jiujinhui.activity.TradeServiceActivity;
-import zz.itcast.jiujinhui.bean.test;
-import zz.itcast.jiujinhui.res.MyX509TrustManager;
 import zz.itcast.jiujinhui.res.NetUtils;
-import android.R.interpolator;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
@@ -31,16 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.HurlStack.UrlRewriter;
-import com.google.gson.Gson;
-import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
 
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 public class TradeFragment extends BaseFragment {
@@ -108,15 +89,16 @@ public class TradeFragment extends BaseFragment {
 
 			@Override
 			public void run() {
-				
+
 				try {
 					JSONObject jsonObject = new JSONObject();
 					jsonObject.put("name", "NL");
-					
+
 					String urlpath = "https://www.4001149114.com/NLJJ/dealwine/gettoken?appname=NL";
-					
-					HttpsURLConnection conn = NetUtils.httpsconn(urlpath, jsonObject,"POST");
-				           
+
+					HttpsURLConnection conn = NetUtils.httpsconn(urlpath,
+							jsonObject, "POST");
+
 					// 若传递成功，解析服务器返回的数据
 					int code = conn.getResponseCode();
 					if (code == 200) {
@@ -128,17 +110,15 @@ public class TradeFragment extends BaseFragment {
 						Log.e("ss", s);
 						System.err.println(t);
 					} else {
-						Toast.makeText(getActivity(), "数据提交失败", 1)
-								.show();
+						Toast.makeText(getActivity(), "数据提交失败", 1).show();
 					}
 
-				}  catch (Exception e) {
+				} catch (Exception e) {
 					// TODO: handle exception
 				}
 
-				
-			}		
-			
+			}
+
 		}).start();
 
 	}

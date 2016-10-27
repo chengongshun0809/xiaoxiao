@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import zz.itcast.jiujinhui.activity.LoginActivity;
 import zz.itcast.jiujinhui.activity.MainActivity;
+import zz.itcast.jiujinhui.bean.UserBean;
 import zz.itcast.jiujinhui.res.Constants;
 import android.app.Activity;
 import android.content.Intent;
@@ -74,7 +75,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 										.getString("access_token");
 								final String openid = jsonObject
 										.getString("openid");
-								System.err.println(accessToken+"   " +openid);
+								System.err.println("accessToken:   "+accessToken);
+								System.err.println("openid:   "+openid);
 								// 获取access_token，openid后，就可以用来获取更多用户信息，比如微信昵称，头像，性别等。接口为：
 								/*
 								 * 这个是验证access_token 是否是有效的
@@ -94,6 +96,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 											ResponseInfo<String> responseInfo) {
 										try {
 											object = new JSONObject(responseInfo.result.toString());
+											
 											int errcode=object.getInt("errcode");
 											if (errcode==0) {//说明access_token是有效的
 												String urlString="https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid + "&lang=zh_CN";
@@ -111,6 +114,10 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 														try {
 															JSONObject json=new JSONObject(responseInfo.result.toString());
 															//拿到昵称和头像
+															//用户的unionID
+															String unionid=json.getString("unionid");
+															
+														System.err.println("unionid:   "+unionid);	
 															  String nickname = json.getString("nickname");//昵称
 	                                                            String headimgurl = json.getString("headimgurl");//头像
 														
@@ -121,12 +128,13 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 															
 															startActivity(intent);*/
 															
-															finish();
+															
 															sp.edit().putBoolean("isLogined", true).commit();
 															//用户微信头像
 															sp.edit().putString("headimg", headimgurl).commit();
 														     //用户微信昵称
 															sp.edit().putString("nickname", nickname).commit();
+															finish();
 															
 														} catch (JSONException e) {
 															// TODO Auto-generated catch block
