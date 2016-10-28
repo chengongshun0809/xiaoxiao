@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.squareup.picasso.Picasso;
 
 public class PerInfoActivity extends BaseActivity {
 
@@ -27,6 +28,12 @@ public class PerInfoActivity extends BaseActivity {
 	private ImageView tv_back;
 	@ViewInject(R.id.tv__title)
 	private TextView tv__title;
+	@ViewInject(R.id.et_register_username_id)
+	private TextView et_register_username_id;
+
+	// 圆形图片
+	@ViewInject(R.id.circleImabeView)
+	private zz.itcast.jiujinhui.view.CircleImageView circleImabeView;
 
 	@Override
 	public int getLayoutResID() {
@@ -35,7 +42,7 @@ public class PerInfoActivity extends BaseActivity {
 	}
 
 	private String isshun;
-	
+
 	private Button btnOK;
 	private Button btnCancel;
 
@@ -58,33 +65,20 @@ public class PerInfoActivity extends BaseActivity {
 	public void initView() {
 		// TODO Auto-generated method stub
 		ViewUtils.inject(this);
-		tv__title.setText("个人设置");
+		tv__title.setText("个人信息");
+		// 微信头像
+		sp = getSharedPreferences("user", 0);
+		String headimgurl = sp.getString("headimg", null);
+		Picasso.with(this).load(headimgurl).into(circleImabeView);
+		// 微信昵称
+		String nickNameString = sp.getString("nickname", null);
+		et_register_username_id.setText(nickNameString);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.tuichu:
-			/*
-			 * Dialog dialog = new AlertDialog.Builder(this) .setTitle("确认退出?")
-			 * .setNegativeButton("确定", new DialogInterface.OnClickListener() {
-			 * 
-			 * @Override public void onClick(DialogInterface dialog, int which)
-			 * {
-			 * 
-			 * if ("shun".equals(isshun)) { setResult(200); }
-			 * sp.edit().putBoolean("isLogined", false) .commit();
-			 * 
-			 * finish();
-			 * 
-			 * } }) .setPositiveButton("取消", new
-			 * DialogInterface.OnClickListener() {
-			 * 
-			 * @Override public void onClick(DialogInterface dialog, int which)
-			 * { // TODO Auto-generated method stub dialog.dismiss(); }
-			 * }).create(); dialog.setCanceledOnTouchOutside(true);
-			 * dialog.show();
-			 */
 
 			LayoutInflater inflater = LayoutInflater.from(this);
 			View view = (View) inflater.inflate(R.layout.person_info_tuichu,
@@ -107,7 +101,7 @@ public class PerInfoActivity extends BaseActivity {
 					sp.edit().putBoolean("isLogined", false).commit();
 					builder.dismiss();
 					finish();
-					
+
 				}
 			});
 

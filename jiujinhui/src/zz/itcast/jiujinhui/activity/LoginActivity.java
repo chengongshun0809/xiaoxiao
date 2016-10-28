@@ -2,9 +2,13 @@ package zz.itcast.jiujinhui.activity;
 
 import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.res.Constants;
+import zz.itcast.jiujinhui.view.LoadingDialog;
 import zz.itcast.jiujinhui.wxapi.WXEntryActivity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -67,6 +71,8 @@ public class LoginActivity extends BaseActivity {
 
 	private IWXAPI api;
 
+
+
 	@Override
 	public void initData() {
 		// TODO Auto-generated method stub
@@ -86,6 +92,7 @@ public class LoginActivity extends BaseActivity {
 		phone_login.setOnClickListener(this);
 	}
 
+	
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -110,7 +117,7 @@ public class LoginActivity extends BaseActivity {
 				api.sendReq(req);
 				finish();
 				
-				
+			
 			}
 
 			break;

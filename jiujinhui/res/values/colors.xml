@@ -11,6 +11,9 @@
     <color name="background_tab_pressed">#00000000</color>
     <color name="green_txt">#3366cc</color>
     <color name="igray">#ffF2F2F2</color>
+    <color name="blue">#3366cc</color>
+    <color name="red">#ff0000</color>
+      <color name="white_btn_ren">#ffffff</color>
  <!-- 用于页面背景 -->
 
     <color name="dark">#FF222222</color>
