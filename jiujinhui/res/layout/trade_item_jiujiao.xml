@@ -12,7 +12,7 @@
     <LinearLayout
         android:id="@+id/add_view"
         android:layout_width="fill_parent"
-        android:layout_height="215dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -196,13 +196,15 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/LongTan"
+            android:id="@+id/btn_public"
             android:layout_width="fill_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="18dp"
             android:layout_marginRight="18dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/btn_shape_corners" >
+            android:background="@drawable/btn_shape_corners" 
+            android:visibility="gone"
+            >
 
             <TextView
                 android:id="@+id/btn_name"
@@ -219,6 +221,7 @@
             android:layout_height="10dp"
             android:layout_marginTop="10dp"
             android:background="@color/igray" />
+
     </LinearLayout>
 
 </LinearLayout>

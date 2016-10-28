@@ -42,6 +42,7 @@ public class TradeFragment extends BaseFragment {
 	private ImageView tv_back;
 	@ViewInject(R.id.tv__title)
 	private TextView tv__title;
+	
 
 	@ViewInject(R.id.viewPager_menu)
 	// 主页轮播图
@@ -93,6 +94,7 @@ public class TradeFragment extends BaseFragment {
 		};
 
 	};
+	private RelativeLayout btn_public;
 
 	private void initViewPager() {
 		// TODO Auto-generated method stub
@@ -239,6 +241,8 @@ public class TradeFragment extends BaseFragment {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
 		ll_content.addView(view);
+		btn_public = (RelativeLayout) view.findViewById(R.id.btn_public);
+		
 		tv_rate = (TextView) view.findViewById(R.id.rate);
 		tv_name = (TextView) view.findViewById(R.id.name);
 		tv_dealcode = (TextView) view.findViewById(R.id.dealcode);
@@ -263,7 +267,10 @@ public class TradeFragment extends BaseFragment {
 			// tv_dealterm.setTextColor(R.color.red);
 			tv_tian.setText("天");
 			tv_tian.setTextSize(15);
+			btn_public.setVisibility(View.VISIBLE);
 			// tv_tian.setTextColor(R.color.red);
+		}else {
+			btn_public.setVisibility(View.GONE);
 		}
 
 		int length =sp.getInt("length", 0);
@@ -272,6 +279,7 @@ public class TradeFragment extends BaseFragment {
 
 			View view1 = inflater.inflate(R.layout.trade_item_jiujiao, null);
 			ll_content.addView(view1);
+			
 		}
 	}
 

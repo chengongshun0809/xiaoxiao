@@ -308,7 +308,6 @@ containing a value of this type.
     }
     public static final class id {
         public static final int Autologin=0x7f09003a;
-        public static final int LongTan=0x7f09005f;
         public static final int NickName=0x7f09001a;
         public static final int SmsSubmit=0x7f090054;
         public static final int action_settings=0x7f090062;
@@ -316,6 +315,7 @@ containing a value of this type.
         public static final int btn_login=0x7f09003c;
         public static final int btn_name=0x7f090060;
         public static final int btn_nologin_fragment=0x7f090035;
+        public static final int btn_public=0x7f09005f;
         public static final int btn_regiest=0x7f09003b;
         public static final int btn_weixin=0x7f090002;
         public static final int buy_sale_pager=0x7f09002b;
