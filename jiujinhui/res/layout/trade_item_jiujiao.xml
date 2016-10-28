@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="4dp"
+        android:background="@color/igray" />
+
     <LinearLayout
         android:id="@+id/add_view"
         android:layout_width="fill_parent"
@@ -39,28 +44,26 @@
                 <LinearLayout
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginLeft="21dp"
                     android:layout_marginTop="10dp"
-                     >
-                     <TextView
-                    android:id="@+id/rate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="5.5"
-                    android:textColor="#ff0000"
-                    android:textSize="28sp" />
+                    android:orientation="horizontal" >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:text="%"
-                    android:textColor="#ff0000"
-                    android:textSize="28sp" />
+                    <TextView
+                        android:id="@+id/rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5.5"
+                        android:textColor="#ff0000"
+                        android:textSize="28sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:text="%"
+                        android:textColor="#ff0000"
+                        android:textSize="28sp" />
                 </LinearLayout>
-
-               
 
                 <TextView
                     android:layout_width="120dp"
@@ -170,6 +173,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="成交价:¥ "
+                         android:textColor="#ff0000"
                         android:textSize="15.5sp" />
 
                     <TextView
@@ -177,6 +181,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="298.26"
+                         android:textColor="#ff0000"
                         android:textSize="15.5sp" />
 
                     <TextView
@@ -184,6 +189,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="天"
+                         android:textColor="#ff0000"
                         android:textSize="15.5sp" />
                 </LinearLayout>
             </LinearLayout>

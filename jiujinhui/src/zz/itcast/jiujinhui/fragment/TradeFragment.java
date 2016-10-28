@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import zz.itcast.jiujinhui.R;
@@ -73,24 +75,25 @@ public class TradeFragment extends BaseFragment {
 		viewPager.setSleepTime(4000);
 		initViewPager();
 		sp = getActivity().getSharedPreferences("user", 0);
-		
-	}
-  Handler mHandler=new Handler(){
-	  
-	  public void handleMessage(android.os.Message msg) {
-		  switch (msg.what) {
-		case 1:
-			UpdateUI();
-			break;
 
-		default:
-			break;
-		}
-		  
-		  
-	  };
-	  
-  };
+	}
+
+	Handler mHandler = new Handler() {
+
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:
+				UpdateUI();
+				break;
+
+			default:
+				break;
+			}
+
+		};
+
+	};
+
 	private void initViewPager() {
 		// TODO Auto-generated method stub
 
@@ -109,7 +112,7 @@ public class TradeFragment extends BaseFragment {
 		viewPager.addViews(imageList);
 		// 开始轮播
 		viewPager.startPlay();
-		
+
 	}
 
 	@Override
@@ -186,29 +189,44 @@ public class TradeFragment extends BaseFragment {
 			String maindealgood = jsonObject.getString("maindealgood");
 			JSONObject jsonObject2 = new JSONObject(maindealgood);
 			Log.e("v", jsonObject2.getString("dgid"));
-		
+
 			// 置顶酒金窖名字
-		String	name = jsonObject2.getString("name");
-		Log.e("vv", jsonObject2.getString("name"));
-		sp.edit().putString("name", name).commit();
+			String name = jsonObject2.getString("name");
+			Log.e("vv", jsonObject2.getString("name"));
+			sp.edit().putString("name", name).commit();
 			// 交易代码
-		String dealcode = jsonObject2.getString("dealcode");
-		sp.edit().putString("dealcode", dealcode).commit();
+			String dealcode = jsonObject2.getString("dealcode");
+			sp.edit().putString("dealcode", dealcode).commit();
 			// 限量发行
-		String	stock = jsonObject2.getString("stock");
-		sp.edit().putString("stock", stock).commit();
+			String stock = jsonObject2.getString("stock");
+			sp.edit().putString("stock", stock).commit();
 			// 增益比例
-		String rate = jsonObject2.getString("rate");
-		sp.edit().putString("rate", rate).commit();
+			String rate = jsonObject2.getString("rate");
+			sp.edit().putString("rate", rate).commit();
 			// 我要认购的状态3
-		String state = jsonObject2.getString("state");
-		sp.edit().putString("state", state).commit();
+			String state = jsonObject2.getString("state");
+			sp.edit().putString("state", state).commit();
 			// 离认购期
-		String dealterm = jsonObject2.getString("dealterm");
-		sp.edit().putString("dealterm", dealterm).commit();
-		Message message=new Message();
-		message.what=1;
-          mHandler.sendMessage(message);
+			String dealterm = jsonObject2.getString("dealterm");
+			sp.edit().putString("dealterm", dealterm).commit();
+			// 其他酒金窖数组
+			JSONArray dealgoodslist = jsonObject.getJSONArray("dealgoods");
+			/*
+			 * int length=dealgoodslist.length(); //遍历JSONArray for (int i = 0;
+			 * i < length; i++) {
+			 * 
+			 * LayoutInflater inflater = LayoutInflater.from(getActivity());
+			 * View view1 = inflater.inflate(R.layout.trade_item_jiujiao, null);
+			 * ll_content.addView(view1);
+			 * 
+			 * }
+			 */
+			int length=dealgoodslist.length();
+			sp.edit().putInt("length", length).commit();
+
+			Message message = new Message();
+			message.what = 1;
+			mHandler.sendMessage(message);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -246,7 +264,14 @@ public class TradeFragment extends BaseFragment {
 			tv_tian.setText("天");
 			tv_tian.setTextSize(15);
 			// tv_tian.setTextColor(R.color.red);
+		}
 
+		int length =sp.getInt("length", 0);
+		// 遍历JSONArray
+		for (int i = 0; i < length; i++) {
+
+			View view1 = inflater.inflate(R.layout.trade_item_jiujiao, null);
+			ll_content.addView(view1);
 		}
 	}
 
