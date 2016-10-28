@@ -42,7 +42,6 @@ public class TradeFragment extends BaseFragment {
 	private ImageView tv_back;
 	@ViewInject(R.id.tv__title)
 	private TextView tv__title;
-	
 
 	@ViewInject(R.id.viewPager_menu)
 	// 主页轮播图
@@ -95,6 +94,9 @@ public class TradeFragment extends BaseFragment {
 
 	};
 	private RelativeLayout btn_public;
+	private TextView tv_jin;
+	private TextView tv_deaTextView;
+	private TextView tv_day;
 
 	private void initViewPager() {
 		// TODO Auto-generated method stub
@@ -213,19 +215,22 @@ public class TradeFragment extends BaseFragment {
 			sp.edit().putString("dealterm", dealterm).commit();
 			// 其他酒金窖数组
 			JSONArray dealgoodslist = jsonObject.getJSONArray("dealgoods");
-			/*
-			 * int length=dealgoodslist.length(); //遍历JSONArray for (int i = 0;
-			 * i < length; i++) {
-			 * 
-			 * LayoutInflater inflater = LayoutInflater.from(getActivity());
-			 * View view1 = inflater.inflate(R.layout.trade_item_jiujiao, null);
-			 * ll_content.addView(view1);
-			 * 
-			 * }
-			 */
-			int length=dealgoodslist.length();
+			int length = dealgoodslist.length();
 			sp.edit().putInt("length", length).commit();
-
+             
+			//解析dealgoods
+			for (int i = 0; i < length; i++) {
+				//龙潭的json
+				JSONObject jsonObject3=dealgoodslist.getJSONObject(i);
+				
+				
+			}
+			
+			
+			
+			
+			
+			
 			Message message = new Message();
 			message.what = 1;
 			mHandler.sendMessage(message);
@@ -242,7 +247,7 @@ public class TradeFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
 		ll_content.addView(view);
 		btn_public = (RelativeLayout) view.findViewById(R.id.btn_public);
-		
+
 		tv_rate = (TextView) view.findViewById(R.id.rate);
 		tv_name = (TextView) view.findViewById(R.id.name);
 		tv_dealcode = (TextView) view.findViewById(R.id.dealcode);
@@ -269,18 +274,24 @@ public class TradeFragment extends BaseFragment {
 			tv_tian.setTextSize(15);
 			btn_public.setVisibility(View.VISIBLE);
 			// tv_tian.setTextColor(R.color.red);
-		}else {
-			btn_public.setVisibility(View.GONE);
 		}
-
-		int length =sp.getInt("length", 0);
+		int length = sp.getInt("length", 0);
 		// 遍历JSONArray
 		for (int i = 0; i < length; i++) {
 
 			View view1 = inflater.inflate(R.layout.trade_item_jiujiao, null);
 			ll_content.addView(view1);
-			
+			tv_jin = (TextView) view1.findViewById(R.id.li);
+			tv_deaTextView = (TextView) view1.findViewById(R.id.realprice);
+			tv_day = (TextView) view1.findViewById(R.id.term_day);
+			tv_jin.setText("进入交易大厅>>");
+			tv_deaTextView.setVisibility(View.GONE);
+			tv_day.setVisibility(View.GONE);
+			RelativeLayout btn_jinru = (RelativeLayout) view1
+					.findViewById(R.id.btn_public);
+			btn_jinru.setVisibility(View.GONE);
 		}
+
 	}
 
 	@Override
