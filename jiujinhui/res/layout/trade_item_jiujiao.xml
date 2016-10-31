@@ -9,32 +9,28 @@
         android:layout_height="4dp"
         android:background="@color/igray" />
 
-    <LinearLayout
-        android:id="@+id/add_view"
+    <RelativeLayout
+        android:id="@+id/jiaoyizhong"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_height="25dp"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="交易中"
+            android:textColor="#cc0000" />
+    </RelativeLayout>
+
+    
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="150dp"
             android:orientation="horizontal" >
-
-            <RelativeLayout
-                android:id="@+id/jiaoyizhong"
-                android:layout_width="fill_parent"
-                android:layout_height="25dp"
-                android:visibility="gone" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:text="交易中"
-                    android:textColor="#cc0000" />
-            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="120dp"
@@ -173,7 +169,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="成交价:¥ "
-                         android:textColor="#3366cc"
+                        android:textColor="#3366cc"
                         android:textSize="15.5sp" />
 
                     <TextView
@@ -181,7 +177,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="298.26"
-                         android:textColor="#3366cc"
+                        android:textColor="#3366cc"
                         android:textSize="15.5sp" />
 
                     <TextView
@@ -189,7 +185,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="天"
-                         android:textColor="#3366cc"
+                        android:textColor="#3366cc"
                         android:textSize="15.5sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -202,9 +198,8 @@
             android:layout_marginLeft="18dp"
             android:layout_marginRight="18dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/btn_shape_corners" 
-            android:visibility="gone"
-            >
+            android:background="@drawable/btn_shape_corners"
+            android:visibility="gone" >
 
             <TextView
                 android:id="@+id/btn_name"
@@ -221,7 +216,6 @@
             android:layout_height="10dp"
             android:layout_marginTop="10dp"
             android:background="@color/igray" />
-
-    </LinearLayout>
+   
 
 </LinearLayout>

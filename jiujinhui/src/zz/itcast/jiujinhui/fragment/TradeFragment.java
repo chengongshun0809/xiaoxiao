@@ -3,7 +3,9 @@ package zz.itcast.jiujinhui.fragment;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -31,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.lidroid.xutils.ViewUtils;
 
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -97,6 +100,10 @@ public class TradeFragment extends BaseFragment {
 	private TextView tv_jin;
 	private TextView tv_deaTextView;
 	private TextView tv_day;
+	private RelativeLayout trading;
+	private LayoutInflater inflater;
+	private TextView tv_name2;
+	private String dealgoodname;
 
 	private void initViewPager() {
 		// TODO Auto-generated method stub
@@ -213,25 +220,25 @@ public class TradeFragment extends BaseFragment {
 			// 离认购期
 			String dealterm = jsonObject2.getString("dealterm");
 			sp.edit().putString("dealterm", dealterm).commit();
+
 			// 其他酒金窖数组
 			JSONArray dealgoodslist = jsonObject.getJSONArray("dealgoods");
 			int length = dealgoodslist.length();
 			sp.edit().putInt("length", length).commit();
-             
-			//解析dealgoods
+            sp.edit().putString("dealgoodslist", dealgoodslist.toString()).commit();
+			// 解析dealgoods
 			for (int i = 0; i < length; i++) {
-				//龙潭的json
-				JSONObject jsonObject3=dealgoodslist.getJSONObject(i);
-				
-				
+				// 龙潭的json
+				JSONObject jsonObject3 = dealgoodslist.getJSONObject(i);
+				// 划分出state
+				String goodstate = jsonObject3.getString("state");
+				sp.edit().putString("goodstate", goodstate).commit();
+				dealgoodname = jsonObject3.getString("name");
+				Log.e("vr", dealgoodname);
+			    	
+                 
 			}
-			
-			
-			
-			
-			
-			
-			Message message = new Message();
+     	Message message = new Message();
 			message.what = 1;
 			mHandler.sendMessage(message);
 		} catch (Exception e) {
@@ -243,24 +250,25 @@ public class TradeFragment extends BaseFragment {
 	private void UpdateUI() {
 		// TODO Auto-generated method stub
 		// 要获取要将动态加载内容置入的容器 LinearLayout
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
-		View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
-		ll_content.addView(view);
-		btn_public = (RelativeLayout) view.findViewById(R.id.btn_public);
-
-		tv_rate = (TextView) view.findViewById(R.id.rate);
-		tv_name = (TextView) view.findViewById(R.id.name);
-		tv_dealcode = (TextView) view.findViewById(R.id.dealcode);
-		tv_stock = (TextView) view.findViewById(R.id.stock);
-		tv_lirengou = (TextView) view.findViewById(R.id.li);
-		tv_dealterm = (TextView) view.findViewById(R.id.realprice);
-		tv_tian = (TextView) view.findViewById(R.id.term_day);
-		btn_name = (TextView) view.findViewById(R.id.btn_name);
-		tv_rate.setText(sp.getString("rate", null));
-		tv_name.setText(sp.getString("name", null));
-		tv_dealcode.setText(sp.getString("dealcode", null));
-		tv_stock.setText(sp.getString("stock", null));
 		if ("3".equals(sp.getString("state", null))) {
+			inflater = LayoutInflater.from(getActivity());
+			View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
+			ll_content.addView(view);
+			btn_public = (RelativeLayout) view.findViewById(R.id.btn_public);
+
+			tv_rate = (TextView) view.findViewById(R.id.rate);
+			tv_name = (TextView) view.findViewById(R.id.name);
+			tv_dealcode = (TextView) view.findViewById(R.id.dealcode);
+			tv_stock = (TextView) view.findViewById(R.id.stock);
+			tv_lirengou = (TextView) view.findViewById(R.id.li);
+			tv_dealterm = (TextView) view.findViewById(R.id.realprice);
+			tv_tian = (TextView) view.findViewById(R.id.term_day);
+			btn_name = (TextView) view.findViewById(R.id.btn_name);
+			tv_rate.setText(sp.getString("rate", null));
+			tv_name.setText(sp.getString("name", null));
+			tv_dealcode.setText(sp.getString("dealcode", null));
+			tv_stock.setText(sp.getString("stock", null));
+
 			btn_name.setText("我要认购");
 			btn_name.setTextSize(18);
 			btn_name.setTextColor(R.color.white_btn_ren);
@@ -275,21 +283,32 @@ public class TradeFragment extends BaseFragment {
 			btn_public.setVisibility(View.VISIBLE);
 			// tv_tian.setTextColor(R.color.red);
 		}
-		int length = sp.getInt("length", 0);
-		// 遍历JSONArray
-		for (int i = 0; i < length; i++) {
 
-			View view1 = inflater.inflate(R.layout.trade_item_jiujiao, null);
-			ll_content.addView(view1);
-			tv_jin = (TextView) view1.findViewById(R.id.li);
-			tv_deaTextView = (TextView) view1.findViewById(R.id.realprice);
-			tv_day = (TextView) view1.findViewById(R.id.term_day);
-			tv_jin.setText("进入交易大厅>>");
-			tv_deaTextView.setVisibility(View.GONE);
-			tv_day.setVisibility(View.GONE);
-			RelativeLayout btn_jinru = (RelativeLayout) view1
-					.findViewById(R.id.btn_public);
-			btn_jinru.setVisibility(View.GONE);
+		if ("2".equals(sp.getString("goodstate", null))) {
+			// 遍历JSONArray
+			int length = sp.getInt("length", 0);
+			for (int i = 0; i < length; i++) {
+
+				View view1 = inflater
+						.inflate(R.layout.trade_item_jiujiao, null);
+				ll_content.addView(view1);
+				tv_name2 = (TextView) view1.findViewById(R.id.name);
+				tv_jin = (TextView) view1.findViewById(R.id.li);
+				tv_deaTextView = (TextView) view1.findViewById(R.id.realprice);
+				tv_day = (TextView) view1.findViewById(R.id.term_day);
+				trading = (RelativeLayout) view1.findViewById(R.id.jiaoyizhong);
+				trading.setVisibility(View.VISIBLE);
+				tv_jin.setText("进入交易大厅>>");
+				tv_deaTextView.setVisibility(View.GONE);
+				tv_day.setVisibility(View.GONE);
+				RelativeLayout btn_jinru = (RelativeLayout) view1
+						.findViewById(R.id.btn_public);
+				btn_jinru.setVisibility(View.GONE);
+			 
+			
+			
+			}
+			 tv_name2.setText(dealgoodname);
 		}
 
 	}
