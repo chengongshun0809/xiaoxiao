@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import zz.itcast.jiujinhui.R;
@@ -27,6 +28,7 @@ import android.text.StaticLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -104,6 +106,18 @@ public class TradeFragment extends BaseFragment {
 	private LayoutInflater inflater;
 	private TextView tv_name2;
 	private String dealgoodname;
+	private LinearLayout litmit;
+
+	private LinearLayout jinru;
+
+	private JSONObject jsonObject3;
+	private JSONArray dealgoodslist;
+	private TextView dealcode;
+
+	private String state;
+	private int length;
+
+	private TextView lijin;
 
 	private void initViewPager() {
 		// TODO Auto-generated method stub
@@ -214,31 +228,15 @@ public class TradeFragment extends BaseFragment {
 			// 增益比例
 			String rate = jsonObject2.getString("rate");
 			sp.edit().putString("rate", rate).commit();
-			// 我要认购的状态3
-			String state = jsonObject2.getString("state");
+			state = jsonObject2.getString("state");
 			sp.edit().putString("state", state).commit();
 			// 离认购期
 			String dealterm = jsonObject2.getString("dealterm");
 			sp.edit().putString("dealterm", dealterm).commit();
 
-			// 其他酒金窖数组
-			JSONArray dealgoodslist = jsonObject.getJSONArray("dealgoods");
-			int length = dealgoodslist.length();
-			sp.edit().putInt("length", length).commit();
-            sp.edit().putString("dealgoodslist", dealgoodslist.toString()).commit();
-			// 解析dealgoods
-			for (int i = 0; i < length; i++) {
-				// 龙潭的json
-				JSONObject jsonObject3 = dealgoodslist.getJSONObject(i);
-				// 划分出state
-				String goodstate = jsonObject3.getString("state");
-				sp.edit().putString("goodstate", goodstate).commit();
-				dealgoodname = jsonObject3.getString("name");
-				Log.e("vr", dealgoodname);
-			    	
-                 
-			}
-     	Message message = new Message();
+			dealgoodslist = jsonObject.getJSONArray("dealgoods");
+			length = dealgoodslist.length();
+			Message message = new Message();
 			message.what = 1;
 			mHandler.sendMessage(message);
 		} catch (Exception e) {
@@ -284,31 +282,68 @@ public class TradeFragment extends BaseFragment {
 			// tv_tian.setTextColor(R.color.red);
 		}
 
-		if ("2".equals(sp.getString("goodstate", null))) {
-			// 遍历JSONArray
-			int length = sp.getInt("length", 0);
-			for (int i = 0; i < length; i++) {
+		for (int i = 0; i < length; i++) {
 
-				View view1 = inflater
-						.inflate(R.layout.trade_item_jiujiao, null);
-				ll_content.addView(view1);
-				tv_name2 = (TextView) view1.findViewById(R.id.name);
-				tv_jin = (TextView) view1.findViewById(R.id.li);
-				tv_deaTextView = (TextView) view1.findViewById(R.id.realprice);
-				tv_day = (TextView) view1.findViewById(R.id.term_day);
-				trading = (RelativeLayout) view1.findViewById(R.id.jiaoyizhong);
-				trading.setVisibility(View.VISIBLE);
-				tv_jin.setText("进入交易大厅>>");
-				tv_deaTextView.setVisibility(View.GONE);
-				tv_day.setVisibility(View.GONE);
-				RelativeLayout btn_jinru = (RelativeLayout) view1
-						.findViewById(R.id.btn_public);
-				btn_jinru.setVisibility(View.GONE);
-			 
-			
-			
+			// 遍历JSONArray
+			View view1 = inflater.inflate(R.layout.trade_item_jiujiao, null);
+			// ll_content.addView(view1);
+			tv_name2 = (TextView) view1.findViewById(R.id.name);
+
+			tv_deaTextView = (TextView) view1.findViewById(R.id.realprice);
+			tv_day = (TextView) view1.findViewById(R.id.term_day);
+			litmit = (LinearLayout) view1.findViewById(R.id.limit);
+			litmit.setVisibility(View.GONE);
+			trading = (RelativeLayout) view1.findViewById(R.id.jiaoyizhong);
+			trading.setVisibility(View.VISIBLE);
+
+			lijin = (TextView) view1.findViewById(R.id.li);
+			lijin.setText("进入交易大厅>>");
+			dealcode = (TextView) view1.findViewById(R.id.dealcode);
+			tv_deaTextView.setVisibility(View.GONE);
+			tv_day.setVisibility(View.GONE);
+			RelativeLayout btn_jinru = (RelativeLayout) view1
+					.findViewById(R.id.btn_public);
+			btn_jinru.setVisibility(View.GONE);
+
+			try {
+				jsonObject3 = dealgoodslist.getJSONObject(i);
+
+				int goodstate = jsonObject3.getInt("state");
+
+				String dealgoodname = jsonObject3.getString("name");
+				Log.e("vr", dealgoodname);
+				String goodsdealcode = jsonObject3.getString("dealcode");
+				final String dgid = jsonObject3.getString("dgid");
+				Log.e("GD", dgid);
+				tv_name2.setText(dealgoodname);
+				dealcode.setText(goodsdealcode);
+
+				lijin.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						// TODO Auto-generated method stub
+
+						Intent intent = new Intent(getActivity(),
+								TradeServiceActivity.class);
+
+						intent.putExtra("dealdgid", dgid);
+						startActivity(intent);
+					}
+
+				});
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			 tv_name2.setText(dealgoodname);
+
+			
+			
+			// tv_jin.setId(i);
+			ll_content.addView(view1);
+
+
 		}
 
 	}
@@ -336,12 +371,6 @@ public class TradeFragment extends BaseFragment {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
-		switch (v.getId()) {
-
-		default:
-			break;
-		}
-
 	}
 
 }

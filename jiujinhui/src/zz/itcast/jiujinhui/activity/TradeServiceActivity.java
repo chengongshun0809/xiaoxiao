@@ -19,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -60,7 +61,11 @@ public class TradeServiceActivity extends BaseActivity {
 	private PagerSlidingTabStrip tabs;
 	@ViewInject(R.id.trade_pager)
 	private ViewPager trade_pager;
-
+  //酒窖名字
+	@ViewInject(R.id.jiujiaoname)
+	private TextView jiujiaoname;
+	
+	
 	//
 	// 交易曲线
 	private ArrayList<Fragment> fragmentsList1;
@@ -122,7 +127,11 @@ public class TradeServiceActivity extends BaseActivity {
 		ViewUtils.inject(this);
 		tv__title.setText("交易服务");
 		handler.post(hscrollRunnable);
-
+		/*String jiujiaoName=getIntent().getStringExtra("id");
+		jiujiaoname.setText(jiujiaoName);*/
+		String dgid=getIntent().getStringExtra("dealdgid");
+		Log.e("mm", dgid);
+		
 	}
 
 	@Override

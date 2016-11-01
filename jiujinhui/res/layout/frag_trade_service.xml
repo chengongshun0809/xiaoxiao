@@ -28,6 +28,7 @@
                     android:layout_height="40dp" >
 
                     <TextView
+                        android:id="@+id/jiujiaoname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
