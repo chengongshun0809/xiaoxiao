@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.activity.TradeServiceActivity;
 import zz.itcast.jiujinhui.res.NetUtils;
+import zz.itcast.jiujinhui.view.AutoScrollTextView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -118,7 +119,12 @@ public class TradeFragment extends BaseFragment {
 		private LinearLayout ll_viewpager_home_frags;
 		@ViewInject(R.id.vp_home_fragment)
 		private ViewPager vp_home_fragment;
-	private void initViewPager() {
+		//跑马灯
+		@ViewInject(R.id.TextViewNotice)
+		private zz.itcast.jiujinhui.view.AutoScrollTextView autoScrollTextView ;
+		
+		
+		private void initViewPager() {
 		// TODO Auto-generated method stub
 
 		vp_ImgUrls = new ArrayList<String>();
@@ -196,6 +202,9 @@ public class TradeFragment extends BaseFragment {
 	
 	@Override
 	public void initData() {
+		autoScrollTextView.init(getActivity().getWindowManager());
+		autoScrollTextView.startScroll();
+		
 		/*
 		 * new Thread(new Runnable() {
 		 * 
@@ -449,4 +458,8 @@ public class TradeFragment extends BaseFragment {
 		super.onClick(v);
 	}
 
+	
+
+	
+	
 }

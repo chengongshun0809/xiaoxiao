@@ -10,32 +10,35 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lidroid.xutils.BitmapUtils;
+
 /**
-		 * @Description 首页轮播图的适配器
-		 * @author dp
-		 * @date 2016-3-11 下午1:47:16
-		 * @param <String>
+ * @Description 首页轮播图的适配器
+ * @author dp
+ * @date 2016-3-11 下午1:47:16
+ * @param <String>
  */
 public class HomeFragPagerAdapter extends PagerAdapter {
 	private List<String> data;
 	private Context context;
 	private BitmapUtils bitmapUtils;
-	
-	public HomeFragPagerAdapter(Context ctx,List<String> data){
+
+	public HomeFragPagerAdapter(Context ctx, List<String> data) {
 		this.data = data;
 		this.context = ctx;
 		bitmapUtils = new BitmapUtils(context);
 	}
-	
+
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-//		super.destroyItem(container, position, object);
-		container.removeView((View) object);
+		// // 注意在此不要做任何操作，因为我们需要实现向左滑动，否则会产生IndexOutOfBoundsException
+		container.removeView((View)object);
 	}
+
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
-		String imgUrl = data.get(position);
-		View view = View.inflate(context, R.layout.item_viewpager_home_frag, null);
+		String imgUrl = data.get(position % data.size());
+		View view = View.inflate(context, R.layout.item_viewpager_home_frag,
+				null);
 		if (!TextUtils.isEmpty(imgUrl)) {
 			bitmapUtils.display(view, imgUrl);
 		}
@@ -45,7 +48,7 @@ public class HomeFragPagerAdapter extends PagerAdapter {
 
 	@Override
 	public int getCount() {
-		return data.size();
+		return  data.size();
 	}
 
 	@Override

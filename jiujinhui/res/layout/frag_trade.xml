@@ -41,6 +41,29 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:background="#EEE"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:src="@drawable/laba" />
+
+                <zz.itcast.jiujinhui.view.AutoScrollTextView
+                    android:id="@+id/TextViewNotice"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:text="酒币提现时间调整为同开盘时间 "
+                    android:textSize="20px" >
+                </zz.itcast.jiujinhui.view.AutoScrollTextView>
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/ll_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
