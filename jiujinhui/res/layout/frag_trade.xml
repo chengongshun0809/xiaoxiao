@@ -10,19 +10,38 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
-       <LinearLayout
-            
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <zz.itcast.jiujinhui.view.AbSlidingPlayView
-                android:id="@+id/viewPager_menu"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="#00000000" />
+                android:background="@drawable/product_loading" >
+
+                <!-- 广告条 -->
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/vp_home_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp" >
+                </android.support.v4.view.ViewPager>
+                <!-- 广告条指示点 -->
+
+                <LinearLayout
+                    android:id="@+id/ll_viewpager_home_frags"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#00000000"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </RelativeLayout>
+
             <LinearLayout
-               android:id="@+id/ll_content"
+                android:id="@+id/ll_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >

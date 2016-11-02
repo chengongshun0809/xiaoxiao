@@ -130,6 +130,8 @@ public class TradeServiceActivity extends BaseActivity {
 		/*String jiujiaoName=getIntent().getStringExtra("id");
 		jiujiaoname.setText(jiujiaoName);*/
 		String dgid=getIntent().getStringExtra("dealdgid");
+		String name=getIntent().getStringExtra("name");
+		jiujiaoname.setText(name);
 		Log.e("mm", dgid);
 		
 	}

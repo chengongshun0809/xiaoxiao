@@ -14,6 +14,8 @@
     <color name="blue">#3366cc</color>
     <color name="red">#ff0000</color>
       <color name="white_btn_ren">#ffffff</color>
+ <color name="half_transparent">#88000000</color>
+ 
  <!-- 用于页面背景 -->
 
     <color name="dark">#FF222222</color>

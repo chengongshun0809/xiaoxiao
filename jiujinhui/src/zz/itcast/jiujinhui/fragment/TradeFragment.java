@@ -1,11 +1,8 @@
 package zz.itcast.jiujinhui.fragment;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -14,30 +11,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import zz.itcast.jiujinhui.R;
-import zz.itcast.jiujinhui.activity.KnowDetailActivity;
 import zz.itcast.jiujinhui.activity.TradeServiceActivity;
-import zz.itcast.jiujinhui.bean.Dealgoods;
 import zz.itcast.jiujinhui.res.NetUtils;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
-import android.text.StaticLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.JsonArray;
 import com.lidroid.xutils.ViewUtils;
-
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 @SuppressLint("ResourceAsColor")
@@ -48,14 +43,10 @@ public class TradeFragment extends BaseFragment {
 	@ViewInject(R.id.tv__title)
 	private TextView tv__title;
 
-	@ViewInject(R.id.viewPager_menu)
-	// 主页轮播图
-	private zz.itcast.jiujinhui.view.AbSlidingPlayView viewPager;
+	
 
 	@ViewInject(R.id.ll_content)
 	private LinearLayout ll_content;
-	// 首页轮播的界面
-	private List<ImageView> imageList;
 
 	private final int[] imageIds = { R.drawable.a, R.drawable.b, R.drawable.c, };
 	private TextView tv_rate;
@@ -74,10 +65,7 @@ public class TradeFragment extends BaseFragment {
 		ViewUtils.inject(this, view);
 		tv_back.setVisibility(view.GONE);
 		tv__title.setText("天天涨钱");
-		// 设置播放方式为来回播放
-		viewPager.setPlayType(1);
-		// 设置播放间隔时间
-		viewPager.setSleepTime(4000);
+		
 		initViewPager();
 		sp = getActivity().getSharedPreferences("user", 0);
 
@@ -118,28 +106,94 @@ public class TradeFragment extends BaseFragment {
 	private int length;
 
 	private TextView lijin;
-
+	// 首页轮播的界面
+	private List<String> vp_ImgUrls;
+	
+	private zz.itcast.jiujinhui.adapter.HomeFragPagerAdapter adapterViewPager;
+	private boolean isPlaying;
+	private int currPosition;
+	private int lastPosition;
+	// 轮播图
+		@ViewInject(R.id.ll_viewpager_home_frags)
+		private LinearLayout ll_viewpager_home_frags;
+		@ViewInject(R.id.vp_home_fragment)
+		private ViewPager vp_home_fragment;
 	private void initViewPager() {
 		// TODO Auto-generated method stub
 
-		if (imageList != null) {
-			imageList.clear();
-			imageList = null;
+		vp_ImgUrls = new ArrayList<String>();
+		
+		vp_ImgUrls
+				.add("https://www.4001149114.com/NLJJ/resources/deal/deallist1.jpg");
+		vp_ImgUrls
+				.add("https://www.4001149114.com/NLJJ/resources/deal/deallist2.jpg");
+		vp_ImgUrls
+				.add("https://www.4001149114.com/NLJJ/resources/deal/deallist3.jpg");
+		initIndicator();
+		//adapterViewPager.notifyDataSetChanged();
+		//设置初始显示条目
+		vp_home_fragment.setCurrentItem(0);
+		lastPosition=0;
+		isPlaying=true;
+		handler.sendEmptyMessageDelayed(0, 2000);
+		
+	}
+	private void initIndicator() {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < vp_ImgUrls.size(); i++) {
+			ImageView iv_indicator = new ImageView(getActivity());
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+					LayoutParams.WRAP_CONTENT, -2);
+			layoutParams.leftMargin = zz.itcast.jiujinhui.res.DensityUtil.dip2px(getActivity(), 20);
+			if (i == 0) {
+				iv_indicator.setImageResource(R.drawable.slide_adv_selected);
+			} else {
+				iv_indicator.setImageResource(R.drawable.slide_adv_normal);
+			}
+			ll_viewpager_home_frags.addView(iv_indicator, layoutParams);
+			
+			
+			
 		}
-		imageList = new ArrayList<ImageView>();
-		for (int i = 0; i < imageIds.length; i++) {
-
-			ImageView image = new ImageView(getActivity());
-			image.setBackgroundResource(imageIds[i]);
-
-			imageList.add(image);
-		}
-		viewPager.addViews(imageList);
-		// 开始轮播
-		viewPager.startPlay();
-
+		
+		
+		
 	}
 
+	private void initViewPagerlistener() {
+		// TODO Auto-generated method stub
+		adapterViewPager = new zz.itcast.jiujinhui.adapter.HomeFragPagerAdapter(getActivity(), vp_ImgUrls);
+		vp_home_fragment.setAdapter(adapterViewPager);
+		// 设置页面改变的监听
+		vp_home_fragment
+				.setOnPageChangeListener(new OnViewPagerPageChangeListener());
+		
+		
+	}
+	private class OnViewPagerPageChangeListener implements OnPageChangeListener {
+		@Override
+		public void onPageSelected(int arg0) {
+			// 页面改变,更新当前条目,并更新指示器
+			currPosition = vp_home_fragment.getCurrentItem();
+			updateIndicatior();
+		}
+
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+		}
+
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+
+		}
+	}
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			updateViewPager();
+		}
+	};
+	
 	@Override
 	public void initData() {
 		/*
@@ -188,7 +242,7 @@ public class TradeFragment extends BaseFragment {
 						String json = NetUtils.readString(is);
 						// 解析json
 						parsonJson(json);
-
+						is.close();
 					}
 
 				} catch (Exception e) {
@@ -198,9 +252,31 @@ public class TradeFragment extends BaseFragment {
 			}
 
 		}).start();
-
 	}
-
+	
+	protected void updateViewPager() {
+		// TODO Auto-generated method stub
+		if (isPlaying) {
+			currPosition = (vp_home_fragment.getCurrentItem() + 1)
+					% vp_ImgUrls.size();
+			vp_home_fragment.setCurrentItem(currPosition);
+			updateIndicatior();
+			handler.removeMessages(0);
+			handler.sendEmptyMessageDelayed(0, 4000);
+		}
+		
+		
+	}
+	private void updateIndicatior() {
+		// TODO Auto-generated method stub
+		ImageView lastIndicatior = (ImageView) ll_viewpager_home_frags
+				.getChildAt(lastPosition);
+		ImageView currIndicatior = (ImageView) ll_viewpager_home_frags
+				.getChildAt(currPosition);
+		lastIndicatior.setImageResource(R.drawable.slide_adv_normal);
+		currIndicatior.setImageResource(R.drawable.slide_adv_selected);
+		lastPosition = currPosition;
+	}
 	@SuppressLint("ResourceAsColor")
 	private void parsonJson(String json) {
 		// TODO Auto-generated method stub
@@ -310,10 +386,11 @@ public class TradeFragment extends BaseFragment {
 
 				int goodstate = jsonObject3.getInt("state");
 
-				String dealgoodname = jsonObject3.getString("name");
+				final String dealgoodname = jsonObject3.getString("name");
 				Log.e("vr", dealgoodname);
 				String goodsdealcode = jsonObject3.getString("dealcode");
 				final String dgid = jsonObject3.getString("dgid");
+
 				Log.e("GD", dgid);
 				tv_name2.setText(dealgoodname);
 				dealcode.setText(goodsdealcode);
@@ -327,7 +404,7 @@ public class TradeFragment extends BaseFragment {
 
 						Intent intent = new Intent(getActivity(),
 								TradeServiceActivity.class);
-
+						intent.putExtra("name", dealgoodname);
 						intent.putExtra("dealdgid", dgid);
 						startActivity(intent);
 					}
@@ -338,11 +415,8 @@ public class TradeFragment extends BaseFragment {
 				e1.printStackTrace();
 			}
 
-			
-			
 			// tv_jin.setId(i);
 			ll_content.addView(view1);
-
 
 		}
 
@@ -350,6 +424,8 @@ public class TradeFragment extends BaseFragment {
 
 	@Override
 	public void onDestroy() {
+		
+		isPlaying = false;
 		super.onDestroy();
 
 	}
@@ -357,7 +433,7 @@ public class TradeFragment extends BaseFragment {
 	@Override
 	public void initListener() {
 		// TODO Auto-generated method stub
-
+    initViewPagerlistener();
 	}
 
 	@Override
