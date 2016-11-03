@@ -1,6 +1,12 @@
 package zz.itcast.jiujinhui.activity;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import org.json.JSONObject;
 
 import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.fragment.BuyChartFragment;
@@ -8,9 +14,11 @@ import zz.itcast.jiujinhui.fragment.EveryDayTradeRecordFragment;
 import zz.itcast.jiujinhui.fragment.NowTradeRecoedFragment;
 import zz.itcast.jiujinhui.fragment.SaleChartFragment;
 import zz.itcast.jiujinhui.res.Arith;
+import zz.itcast.jiujinhui.res.NetUtils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -84,6 +92,7 @@ public class TradeServiceActivity extends BaseActivity {
 	private ImageView tv_back;
 	@ViewInject(R.id.tv__title)
 	private TextView tv__title;
+	private SharedPreferences sp;
 
 	// 定义一个Handler对象
 	private final Handler handler = new Handler();
@@ -99,7 +108,7 @@ public class TradeServiceActivity extends BaseActivity {
 		rb_zhuanrang_service.setOnClickListener(this);
 		person_assets.setOnClickListener(this);
 		
-
+		
 	}
 
 	// 当前滚动距离
@@ -127,12 +136,13 @@ public class TradeServiceActivity extends BaseActivity {
 		ViewUtils.inject(this);
 		tv__title.setText("交易服务");
 		handler.post(hscrollRunnable);
-		/*String jiujiaoName=getIntent().getStringExtra("id");
-		jiujiaoname.setText(jiujiaoName);*/
-		String dgid=getIntent().getStringExtra("dealdgid");
+		dgid = getIntent().getStringExtra("dealdgid");
 		String name=getIntent().getStringExtra("name");
 		jiujiaoname.setText(name);
 		Log.e("mm", dgid);
+		sp = getSharedPreferences("user", 0);
+		unionid = sp.getString("unionid", null);
+		Log.e("ms我的unionID是：", unionid);
 		
 	}
 
@@ -159,6 +169,59 @@ public class TradeServiceActivity extends BaseActivity {
 		tabs_buysale.setViewPager(buy_sale_pager);
 		tabs.setShouldExpand(true);
 		tabs_buysale.setShouldExpand(true);
+		
+		
+		//获取数据
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+		// TODO Auto-generated method stub
+			String url_serviceinfo="https://www.4001149114.com/NLJJ/ddapp/hallorder?unionid="+unionid+"&dgid="+dgid;	
+				HttpsURLConnection connection=NetUtils.httpsconnNoparm(url_serviceinfo, "POST");
+				int code;
+				try {
+					code = connection.getResponseCode();
+					if (code==200) {
+					InputStream iStream=connection.getInputStream();
+					String infojson=NetUtils.readString(iStream);
+					JSONObject jsonObject=new JSONObject(infojson);
+					Log.e("ssssssssss", jsonObject.toString());	
+						
+					}
+					
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				
+				
+			}
+		}).start();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 
 	// 交易曲线图适配器
@@ -606,6 +669,8 @@ public class TradeServiceActivity extends BaseActivity {
 	private Dialog dialog1;
 	private ImageView transAdd;
 	private ImageView transReduce;
+	private String unionid;
+	private String dgid;
 	
 
 

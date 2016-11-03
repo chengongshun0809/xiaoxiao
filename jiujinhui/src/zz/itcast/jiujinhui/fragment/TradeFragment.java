@@ -44,8 +44,6 @@ public class TradeFragment extends BaseFragment {
 	@ViewInject(R.id.tv__title)
 	private TextView tv__title;
 
-	
-
 	@ViewInject(R.id.ll_content)
 	private LinearLayout ll_content;
 
@@ -66,7 +64,7 @@ public class TradeFragment extends BaseFragment {
 		ViewUtils.inject(this, view);
 		tv_back.setVisibility(view.GONE);
 		tv__title.setText("天天涨钱");
-		
+
 		initViewPager();
 		sp = getActivity().getSharedPreferences("user", 0);
 
@@ -92,7 +90,7 @@ public class TradeFragment extends BaseFragment {
 	private TextView tv_deaTextView;
 	private TextView tv_day;
 	private RelativeLayout trading;
-	private LayoutInflater inflater;
+	
 	private TextView tv_name2;
 	private String dealgoodname;
 	private LinearLayout litmit;
@@ -109,26 +107,25 @@ public class TradeFragment extends BaseFragment {
 	private TextView lijin;
 	// 首页轮播的界面
 	private List<String> vp_ImgUrls;
-	
+
 	private zz.itcast.jiujinhui.adapter.HomeFragPagerAdapter adapterViewPager;
 	private boolean isPlaying;
 	private int currPosition;
 	private int lastPosition;
 	// 轮播图
-		@ViewInject(R.id.ll_viewpager_home_frags)
-		private LinearLayout ll_viewpager_home_frags;
-		@ViewInject(R.id.vp_home_fragment)
-		private ViewPager vp_home_fragment;
-		//跑马灯
-		@ViewInject(R.id.TextViewNotice)
-		private zz.itcast.jiujinhui.view.AutoScrollTextView autoScrollTextView ;
-		
-		
-		private void initViewPager() {
+	@ViewInject(R.id.ll_viewpager_home_frags)
+	private LinearLayout ll_viewpager_home_frags;
+	@ViewInject(R.id.vp_home_fragment)
+	private ViewPager vp_home_fragment;
+	// 跑马灯
+	@ViewInject(R.id.TextViewNotice)
+	private zz.itcast.jiujinhui.view.AutoScrollTextView autoScrollTextView;
+
+	private void initViewPager() {
 		// TODO Auto-generated method stub
 
 		vp_ImgUrls = new ArrayList<String>();
-		
+
 		vp_ImgUrls
 				.add("https://www.4001149114.com/NLJJ/resources/deal/deallist1.jpg");
 		vp_ImgUrls
@@ -136,46 +133,45 @@ public class TradeFragment extends BaseFragment {
 		vp_ImgUrls
 				.add("https://www.4001149114.com/NLJJ/resources/deal/deallist3.jpg");
 		initIndicator();
-		//adapterViewPager.notifyDataSetChanged();
-		//设置初始显示条目
+		// adapterViewPager.notifyDataSetChanged();
+		// 设置初始显示条目
 		vp_home_fragment.setCurrentItem(0);
-		lastPosition=0;
-		isPlaying=true;
+		lastPosition = 0;
+		isPlaying = true;
 		handler.sendEmptyMessageDelayed(0, 2000);
-		
+
 	}
+
 	private void initIndicator() {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < vp_ImgUrls.size(); i++) {
 			ImageView iv_indicator = new ImageView(getActivity());
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
 					LayoutParams.WRAP_CONTENT, -2);
-			layoutParams.leftMargin = zz.itcast.jiujinhui.res.DensityUtil.dip2px(getActivity(), 20);
+			layoutParams.leftMargin = zz.itcast.jiujinhui.res.DensityUtil
+					.dip2px(getActivity(), 20);
 			if (i == 0) {
 				iv_indicator.setImageResource(R.drawable.slide_adv_selected);
 			} else {
 				iv_indicator.setImageResource(R.drawable.slide_adv_normal);
 			}
 			ll_viewpager_home_frags.addView(iv_indicator, layoutParams);
-			
-			
-			
+
 		}
-		
-		
-		
+
 	}
 
 	private void initViewPagerlistener() {
 		// TODO Auto-generated method stub
-		adapterViewPager = new zz.itcast.jiujinhui.adapter.HomeFragPagerAdapter(getActivity(), vp_ImgUrls);
+		adapterViewPager = new zz.itcast.jiujinhui.adapter.HomeFragPagerAdapter(
+				getActivity(), vp_ImgUrls);
 		vp_home_fragment.setAdapter(adapterViewPager);
 		// 设置页面改变的监听
 		vp_home_fragment
 				.setOnPageChangeListener(new OnViewPagerPageChangeListener());
-		
-		
+
 	}
+
 	private class OnViewPagerPageChangeListener implements OnPageChangeListener {
 		@Override
 		public void onPageSelected(int arg0) {
@@ -194,17 +190,18 @@ public class TradeFragment extends BaseFragment {
 
 		}
 	}
+
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			updateViewPager();
 		}
 	};
-	
+
 	@Override
 	public void initData() {
 		autoScrollTextView.init(getActivity().getWindowManager());
 		autoScrollTextView.startScroll();
-		
+
 		/*
 		 * new Thread(new Runnable() {
 		 * 
@@ -262,7 +259,7 @@ public class TradeFragment extends BaseFragment {
 
 		}).start();
 	}
-	
+
 	protected void updateViewPager() {
 		// TODO Auto-generated method stub
 		if (isPlaying) {
@@ -273,9 +270,9 @@ public class TradeFragment extends BaseFragment {
 			handler.removeMessages(0);
 			handler.sendEmptyMessageDelayed(0, 4000);
 		}
-		
-		
+
 	}
+
 	private void updateIndicatior() {
 		// TODO Auto-generated method stub
 		ImageView lastIndicatior = (ImageView) ll_viewpager_home_frags
@@ -286,6 +283,7 @@ public class TradeFragment extends BaseFragment {
 		currIndicatior.setImageResource(R.drawable.slide_adv_selected);
 		lastPosition = currPosition;
 	}
+
 	@SuppressLint("ResourceAsColor")
 	private void parsonJson(String json) {
 		// TODO Auto-generated method stub
@@ -333,8 +331,9 @@ public class TradeFragment extends BaseFragment {
 	private void UpdateUI() {
 		// TODO Auto-generated method stub
 		// 要获取要将动态加载内容置入的容器 LinearLayout
+		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		if ("3".equals(sp.getString("state", null))) {
-			inflater = LayoutInflater.from(getActivity());
+
 			View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
 			ll_content.addView(view);
 			btn_public = (RelativeLayout) view.findViewById(R.id.btn_public);
@@ -433,7 +432,7 @@ public class TradeFragment extends BaseFragment {
 
 	@Override
 	public void onDestroy() {
-		
+
 		isPlaying = false;
 		super.onDestroy();
 
@@ -442,7 +441,7 @@ public class TradeFragment extends BaseFragment {
 	@Override
 	public void initListener() {
 		// TODO Auto-generated method stub
-    initViewPagerlistener();
+		initViewPagerlistener();
 	}
 
 	@Override
@@ -458,8 +457,4 @@ public class TradeFragment extends BaseFragment {
 		super.onClick(v);
 	}
 
-	
-
-	
-	
 }

@@ -9,16 +9,11 @@ import zz.itcast.jiujinhui.fragment.NoLoginPersonFragment;
 import zz.itcast.jiujinhui.fragment.TradeFragment;
 import zz.itcast.jiujinhui.fragment.helpFragment;
 import zz.itcast.jiujinhui.fragment.personFragment;
-import zz.itcast.jiujinhui.res.AppManager;
 import zz.itcast.jiujinhui.res.ToastUtil;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;

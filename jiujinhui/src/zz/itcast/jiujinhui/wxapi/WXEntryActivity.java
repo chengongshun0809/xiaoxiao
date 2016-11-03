@@ -28,7 +28,6 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
-	
 	private IWXAPI mApi;
 	private SharedPreferences sp;
 
@@ -48,10 +47,9 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 		// 重写方法拿到code
 		switch (resp.errCode) {
 		case BaseResp.ErrCode.ERR_OK: // 发送成功
-			
-			
+
 			String code1 = ((SendAuth.Resp) resp).token; // 即为所需的code
-			//Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show();
 			// 拿到code,加上appid和secret拼接网址,请求数据得到包含token和openid来继续请求拿到用户数据
 			String urlstr = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="
 					+ Constants.APP_ID
@@ -75,8 +73,10 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 										.getString("access_token");
 								final String openid = jsonObject
 										.getString("openid");
-								System.err.println("accessToken:   "+accessToken);
-								System.err.println("openid:   "+openid);
+								sp.edit().putString("openid", openid).commit();
+								System.err.println("accessToken:   "
+										+ accessToken);
+								System.err.println("openid:   " + openid);
 								// 获取access_token，openid后，就可以用来获取更多用户信息，比如微信昵称，头像，性别等。接口为：
 								/*
 								 * 这个是验证access_token 是否是有效的
@@ -85,95 +85,192 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 								 * =ACCESS_TOKEN&openid=OPENID 正确的Json返回结果： {
 								 * "errcode":0,"errmsg":"ok" }
 								 */
-								String url="https://api.weixin.qq.com/sns/auth?access_token=" + accessToken + "&openid=" + openid;
-								HttpUtils httpUtils=new HttpUtils();
-								httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+								String url = "https://api.weixin.qq.com/sns/auth?access_token="
+										+ accessToken + "&openid=" + openid;
+								HttpUtils httpUtils = new HttpUtils();
+								httpUtils.send(HttpRequest.HttpMethod.GET, url,
+										new RequestCallBack<String>() {
 
-									private JSONObject object;
+											private JSONObject object;
 
-									@Override
-									public void onSuccess(
-											ResponseInfo<String> responseInfo) {
-										try {
-											object = new JSONObject(responseInfo.result.toString());
-											
-											int errcode=object.getInt("errcode");
-											if (errcode==0) {//说明access_token是有效的
-												String urlString="https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid + "&lang=zh_CN";
-												
-												Toast.makeText(WXEntryActivity.this, "登录成功",
-														Toast.LENGTH_SHORT).show();
-												HttpUtils httpUtils=new HttpUtils();
-												httpUtils.send(HttpRequest.HttpMethod.GET, urlString, new RequestCallBack<String>() {
+											@Override
+											public void onSuccess(
+													ResponseInfo<String> responseInfo) {
+												try {
+													object = new JSONObject(
+															responseInfo.result
+																	.toString());
 
-													@Override
-													public void onSuccess(
-															ResponseInfo<String> responseInfo) {
-														// TODO Auto-generated method stub
-														
-														try {
-															JSONObject json=new JSONObject(responseInfo.result.toString());
-															//拿到昵称和头像
-															//用户的unionID
-															String unionid=json.getString("unionid");
-															
-														System.err.println("unionid:   "+unionid);	
-															  String nickname = json.getString("nickname");//昵称
-	                                                            String headimgurl = json.getString("headimgurl");//头像
-														
-															Log.e("ms", nickname+"  "+headimgurl);
-															
-															/*Intent intent = new Intent(WXEntryActivity.this,
-																	MainActivity.class);
-															
-															startActivity(intent);*/
-															
-															
-															sp.edit().putBoolean("isLogined", true).commit();
-															//用户微信头像
-															sp.edit().putString("headimg", headimgurl).commit();
-														     //用户微信昵称
-															sp.edit().putString("nickname", nickname).commit();
-															finish();
-															
-														} catch (JSONException e) {
-															// TODO Auto-generated catch block
-															e.printStackTrace();
-														}
-														
-														
+													int errcode = object
+															.getInt("errcode");
+													if (errcode == 0) {// 说明access_token是有效的
+														String urlString = "https://api.weixin.qq.com/sns/userinfo?access_token="
+																+ accessToken
+																+ "&openid="
+																+ openid
+																+ "&lang=zh_CN";
+
+														Toast.makeText(
+																WXEntryActivity.this,
+																"登录成功",
+																Toast.LENGTH_SHORT)
+																.show();
+														HttpUtils httpUtils = new HttpUtils();
+														httpUtils
+																.send(HttpRequest.HttpMethod.GET,
+																		urlString,
+																		new RequestCallBack<String>() {
+
+																			@Override
+																			public void onSuccess(
+																					ResponseInfo<String> responseInfo) {
+																				// TODO
+																				// Auto-generated
+																				// method
+																				// stub
+
+																				try {
+																					JSONObject json = new JSONObject(
+																							responseInfo.result
+																									.toString());
+																					// 拿到昵称和头像
+																					// 用户的unionID
+																					String unionid = json
+																							.getString("unionid");
+																					sp.edit()
+																							.putString(
+																									"unionid",
+																									unionid)
+																							.commit();
+																					System.err
+																							.println("我的unionid是:   "
+																									+ unionid);
+																					String nickname = json
+																							.getString("nickname");// 昵称
+																					String headimgurl = json
+																							.getString("headimgurl");// 头像
+
+																					Log.e("ms",
+																							nickname
+																									+ "  "
+																									+ headimgurl);
+
+																					/*
+																					 * Intent
+																					 * intent
+																					 * =
+																					 * new
+																					 * Intent
+																					 * (
+																					 * WXEntryActivity
+																					 * .
+																					 * this
+																					 * ,
+																					 * MainActivity
+																					 * .
+																					 * class
+																					 * )
+																					 * ;
+																					 * 
+																					 * startActivity
+																					 * (
+																					 * intent
+																					 * )
+																					 * ;
+																					 */
+
+																					sp.edit()
+																							.putBoolean(
+																									"isLogined",
+																									true)
+																							.commit();
+																					// 用户微信头像
+																					sp.edit()
+																							.putString(
+																									"headimg",
+																									headimgurl)
+																							.commit();
+																					// 用户微信昵称
+																					sp.edit()
+																							.putString(
+																									"nickname",
+																									nickname)
+																							.commit();
+																					finish();
+																					// 登录成功后，顺便把个人信息传入数据库
+																					String urlinfo = "https://www.4001149114.com/NLJJ/ddapp/register?appid=wxdb59e14854a747c8&unionid="
+																							+ unionid
+																							+ "&openid="
+																							+ openid;
+																					HttpUtils httpUtils = new HttpUtils();
+																					httpUtils
+																							.send(HttpRequest.HttpMethod.POST,
+																									urlinfo,
+																									new RequestCallBack<String>() {
+
+																										@Override
+																										public void onFailure(
+																												HttpException arg0,
+																												String arg1) {
+																											// TODO
+																											// Auto-generated
+																											// method
+																											// stub
+
+																										}
+
+																										@Override
+																										public void onSuccess(
+																												ResponseInfo<String> arg0) {
+																											// TODO
+																											// Auto-generated
+																											// method
+																											// stub
+ 
+																										}
+																									});
+
+																				} catch (JSONException e) {
+																					// TODO
+																					// Auto-generated
+																					// catch
+																					// block
+																					e.printStackTrace();
+																				}
+
+																			}
+
+																			@Override
+																			public void onFailure(
+																					HttpException error,
+																					String msg) {
+																				// TODO
+																				// Auto-generated
+																				// method
+																				// stub
+
+																			}
+																		});
+
 													}
 
-													@Override
-													public void onFailure(
-															HttpException error,
-															String msg) {
-														// TODO Auto-generated method stub
-														
-													}
-												});
-												
+												} catch (JSONException e) {
+													// TODO Auto-generated catch
+													// block
+													e.printStackTrace();
+												}
+
 											}
-											
-											
-											
-										} catch (JSONException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-									
-										
-										
-									}
 
-									@Override
-									public void onFailure(HttpException error,
-											String msg) {
-										// TODO Auto-generated method stub
-										
-									}
-								});
-								
+											@Override
+											public void onFailure(
+													HttpException error,
+													String msg) {
+												// TODO Auto-generated method
+												// stub
+
+											}
+										});
 
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
