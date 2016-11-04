@@ -66,6 +66,7 @@
                             android:layout_height="30dp" >
 
                             <TextView
+                                android:id="@+id/total_zd"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
@@ -107,6 +108,7 @@
                             android:layout_height="30dp" >
 
                             <TextView
+                                android:id="@+id/realprice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
@@ -177,6 +179,7 @@
                             android:orientation="horizontal" >
 
                             <TextView
+                                android:id="@+id/jiubi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -225,6 +228,7 @@
                             android:orientation="horizontal" >
 
                             <TextView
+                                android:id="@+id/subnum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="40dp"
@@ -273,6 +277,7 @@
                             android:orientation="horizontal" >
 
                             <TextView
+                                android:id="@+id/total_shouyi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="28dp"
@@ -321,6 +326,7 @@
                             android:orientation="horizontal" >
 
                             <TextView
+                                android:id="@+id/left_assets"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="40dp"
@@ -369,6 +375,7 @@
                             android:orientation="horizontal" >
 
                             <TextView
+                                android:id="@+id/saling"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="40dp"
@@ -417,6 +424,8 @@
                             android:orientation="horizontal" >
 
                             <TextView
+                                
+                                android:id="@+id/buying"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="40dp"
@@ -465,6 +474,7 @@
                             android:orientation="horizontal" >
 
                             <TextView
+                                android:id="@+id/dealed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="40dp"
@@ -513,6 +523,7 @@
                             android:orientation="horizontal" >
 
                             <TextView
+                                android:id="@+id/taked_goods"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="40dp"
@@ -561,6 +572,7 @@
                             android:orientation="horizontal" >
 
                             <TextView
+                                android:id="@+id/transed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="40dp"
@@ -609,6 +621,7 @@
                             android:orientation="horizontal" >
 
                             <TextView
+                                android:id="@+id/reward"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="28dp"

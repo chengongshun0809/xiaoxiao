@@ -37,6 +37,7 @@ public class LoginActivity extends BaseActivity {
     //手机号登录
 	@ViewInject(R.id.phone_login)
 	private TextView phone_login;
+	private SharedPreferences sp;
 	@Override
 	public void initView() {
 		// TODO Auto-generated method stub
@@ -44,7 +45,7 @@ public class LoginActivity extends BaseActivity {
 		sp = getSharedPreferences("user", MODE_PRIVATE);
 		//tv__title.setText("登录");
 		
-
+	
 	}
 
 	// 判断用户是否安装微信客户端
@@ -67,7 +68,7 @@ public class LoginActivity extends BaseActivity {
 
 	private String ishappy;
 
-	private SharedPreferences sp;
+	
 
 	private IWXAPI api;
 
@@ -115,6 +116,7 @@ public class LoginActivity extends BaseActivity {
 				req.scope="snsapi_userinfo";
 				req.state="none";
 				api.sendReq(req);
+				sp.edit().putBoolean("isLogined", true).commit();
 				finish();
 				
 			

@@ -1,11 +1,11 @@
 package zz.itcast.jiujinhui.activity;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import zz.itcast.jiujinhui.R;
@@ -20,6 +20,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -58,22 +59,19 @@ public class TradeServiceActivity extends BaseActivity {
 	// 转让
 	@ViewInject(R.id.rb_zhuanrang_service)
 	private LinearLayout rb_zhuanrang_service;
-    //个人资产
+	// 个人资产
 	@ViewInject(R.id.person_assets)
 	private RelativeLayout person_assets;
-	
-	
-	
+
 	// 交易曲线
 	@ViewInject(R.id.tabs)
 	private PagerSlidingTabStrip tabs;
 	@ViewInject(R.id.trade_pager)
 	private ViewPager trade_pager;
-  //酒窖名字
+	// 酒窖名字
 	@ViewInject(R.id.jiujiaoname)
 	private TextView jiujiaoname;
-	
-	
+
 	//
 	// 交易曲线
 	private ArrayList<Fragment> fragmentsList1;
@@ -93,6 +91,43 @@ public class TradeServiceActivity extends BaseActivity {
 	@ViewInject(R.id.tv__title)
 	private TextView tv__title;
 	private SharedPreferences sp;
+	// 今日涨跌
+	@ViewInject(R.id.total_zd)
+	private TextView total_zd;
+	// 交易指导价
+	@ViewInject(R.id.realprice)
+	private TextView realpri;
+	// 酒币
+	@ViewInject(R.id.jiubi)
+	private TextView jiubi;
+	// 总资产
+	@ViewInject(R.id.subnum)
+	private TextView total_assets;
+	// 总收益
+	@ViewInject(R.id.total_shouyi)
+	private TextView total_shouyi;
+	// 剩余资产
+	@ViewInject(R.id.left_assets)
+	private TextView left_assets;
+	// 卖出中
+	@ViewInject(R.id.saling)
+	private TextView saling;
+	// 买入中
+	@ViewInject(R.id.buying)
+	private TextView buying;
+
+	// 已成交
+	@ViewInject(R.id.dealed)
+	private TextView dealed;
+	// 已提货
+	@ViewInject(R.id.taked_goods)
+	private TextView taked_goods;
+	// 已转让
+	@ViewInject(R.id.transed)
+	private TextView transed;
+	// 奖励
+	@ViewInject(R.id.reward)
+	private TextView reward;
 
 	// 定义一个Handler对象
 	private final Handler handler = new Handler();
@@ -107,8 +142,7 @@ public class TradeServiceActivity extends BaseActivity {
 		rb_tihuo_service.setOnClickListener(this);
 		rb_zhuanrang_service.setOnClickListener(this);
 		person_assets.setOnClickListener(this);
-		
-		
+
 	}
 
 	// 当前滚动距离
@@ -137,7 +171,7 @@ public class TradeServiceActivity extends BaseActivity {
 		tv__title.setText("交易服务");
 		handler.post(hscrollRunnable);
 		dgid = getIntent().getStringExtra("dealdgid");
-		String name=getIntent().getStringExtra("name");
+		String name = getIntent().getStringExtra("name");
 		jiujiaoname.setText(name);
 		Log.e("mm", dgid);
 		sp = getSharedPreferences("user", 0);
@@ -151,7 +185,22 @@ public class TradeServiceActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		return R.layout.frag_trade_service;
 	}
+//获取到数据后要更新ui
+	Handler mHandler = new Handler() {
 
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:
+				UpdateUI();
+				break;
+
+			default:
+				break;
+			}
+
+		};
+
+	};
 	@Override
 	public void initData() {
 		// TODO Auto-generated method stub
@@ -169,61 +218,90 @@ public class TradeServiceActivity extends BaseActivity {
 		tabs_buysale.setViewPager(buy_sale_pager);
 		tabs.setShouldExpand(true);
 		tabs_buysale.setShouldExpand(true);
-		
-		
-		//获取数据
-		
+
+		// 获取数据
+
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-		// TODO Auto-generated method stub
-			String url_serviceinfo="https://www.4001149114.com/NLJJ/ddapp/hallorder?unionid="+unionid+"&dgid="+dgid;	
-				HttpsURLConnection connection=NetUtils.httpsconnNoparm(url_serviceinfo, "POST");
+				// TODO Auto-generated method stub
+				String url_serviceinfo = "https://www.4001149114.com/NLJJ/ddapp/hallorder?unionid="
+						+ unionid + "&dgid=" + dgid;
+				HttpsURLConnection connection = NetUtils.httpsconnNoparm(
+						url_serviceinfo, "POST");
 				int code;
 				try {
 					code = connection.getResponseCode();
-					if (code==200) {
-					InputStream iStream=connection.getInputStream();
-					String infojson=NetUtils.readString(iStream);
-					JSONObject jsonObject=new JSONObject(infojson);
-					Log.e("ssssssssss", jsonObject.toString());	
-						
+					if (code == 200) {
+						InputStream iStream = connection.getInputStream();
+						String infojson = NetUtils.readString(iStream);
+						JSONObject jsonObject = new JSONObject(infojson);
+						// Log.e("ssssssssss", jsonObject.toString());
+						parseJson(jsonObject);
+
 					}
-					
-					
+
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
-				
-				
+
 			}
 		}).start();
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 	}
 
+
+	protected void parseJson(JSONObject jsonObject) {
+		try {
+			income = jsonObject.getDouble("income");
+			tradeprice = jsonObject.getDouble("realprice");
+			String dealdatajson = jsonObject.getString("dealdata");
+			JSONObject jsonObject2 = new JSONObject(dealdatajson);
+			trans = jsonObject2.getInt("buybacknum");
+			tihuo = jsonObject2.getInt("consumenum");
+			buygooding = jsonObject2.getInt("getnum");
+			salgooding = jsonObject2.getInt("putnum");
+			leftgoodassets = jsonObject2.getInt("stock");
+			totalasset = jsonObject2.getInt("subnum");
+			dealnum = jsonObject2.getInt("dealnum");
+			totalbuy = jsonObject2.getDouble("buyintotal");
+			totaloutmoney = jsonObject2.getDouble("buyouttotal");
+			downaward = jsonObject2.getDouble("downaward");
+			Message message = new Message();
+			message.what = 1;
+			mHandler.sendMessage(message);
+	    Log.e("shunshun", tradeprice+"");		
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	protected void UpdateUI() {
+		// TODO Auto-generated method stub
+		realpri.setText((tradeprice/100) + "");
+		jiubi.setText((income/100) + "");
+		total_assets.setText(totalasset + "");
+		left_assets.setText(leftgoodassets + "");
+		buying.setText(buygooding + "");
+		saling.setText(salgooding + "");
+		dealed.setText(dealnum + "");
+		reward.setText((downaward/100) + "");
+
+		double shouyi = (tradeprice * (leftgoodassets+salgooding)
+			+totaloutmoney- totalbuy)/100;
+		total_shouyi.setText(shouyi + "");
+
+		// total_zd.setText(text)
+		
+	}
+	
+	
 	// 交易曲线图适配器
 	public class MypagerAdapter extends FragmentPagerAdapter {
 		private ArrayList<Fragment> fragmentsList1;
@@ -307,7 +385,6 @@ public class TradeServiceActivity extends BaseActivity {
 	private Button diaog_cancel;
 	private int count_buy;
 
-
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -321,156 +398,170 @@ public class TradeServiceActivity extends BaseActivity {
 			showBuyDialog();
 			break;
 		case R.id.rb_sale_service:
-          showSaleDialog();
+			showSaleDialog();
 			break;
 
 		case R.id.rb_tihuo_service:
-             showTihuoDialog();
+			showTihuoDialog();
 			break;
 
 		case R.id.rb_zhuanrang_service:
-            shouTransDialog();
+			shouTransDialog();
 			break;
-			//个人资产
+		// 个人资产
 		case R.id.person_assets:
-			Intent intent=new Intent(TradeServiceActivity.this,TradeRecordActivity.class);
+			Intent intent = new Intent(TradeServiceActivity.this,
+					TradeRecordActivity.class);
 			startActivity(intent);
-			
+
 			break;
-		
+
 		default:
 			break;
 		}
 	}
-	 int trans_count;
-	//转让
-	 private void shouTransDialog() {
+
+	int trans_count;
+
+	// 转让
+	private void shouTransDialog() {
 		// TODO Auto-generated method stub
-		 LayoutInflater inflater = LayoutInflater.from(this);
-	 		View transView = (View) inflater.inflate(R.layout.trans_service, null);
-		 transTextView = (TextView) transView.findViewById(R.id.product_ordsubmit_count);
-		 transOk = (Button) transView.findViewById(R.id.dialog_ok);
-		 transCancel = (Button) transView.findViewById(R.id.dialog_cancel);
-		 transAdd = (ImageView) transView.findViewById(R.id.product_ordsubmit_count_add);
-		transReduce = (ImageView) transView.findViewById(R.id.product_ordsubmit_count_sub);
-		 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setView(transView);
-			builder.setCancelable(false);
-			dialog1 = builder.show();
-		 transAdd.setOnClickListener(new OnClickListener() {
-			
+		LayoutInflater inflater = LayoutInflater.from(this);
+		View transView = (View) inflater.inflate(R.layout.trans_service, null);
+		transTextView = (TextView) transView
+				.findViewById(R.id.product_ordsubmit_count);
+		transOk = (Button) transView.findViewById(R.id.dialog_ok);
+		transCancel = (Button) transView.findViewById(R.id.dialog_cancel);
+		transAdd = (ImageView) transView
+				.findViewById(R.id.product_ordsubmit_count_add);
+		transReduce = (ImageView) transView
+				.findViewById(R.id.product_ordsubmit_count_sub);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setView(transView);
+		builder.setCancelable(false);
+		dialog1 = builder.show();
+		transAdd.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-             trans_count++;
-             transTextView.setText(""+trans_count);
+				trans_count++;
+				transTextView.setText("" + trans_count);
 			}
 		});
-		 transReduce.setOnClickListener(new OnClickListener() {
-			
+		transReduce.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				if (trans_count>1) {
+				if (trans_count > 1) {
 					trans_count--;
-					   transTextView.setText(""+trans_count);
-				}else {
-					trans_count=1;
+					transTextView.setText("" + trans_count);
+				} else {
+					trans_count = 1;
 				}
-				
+
 			}
 		});
-		 transOk.setOnClickListener(new OnClickListener() {
-			
+		transOk.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		 transCancel.setOnClickListener(new OnClickListener() {
-			
+		transCancel.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				dialog1.dismiss();
-				trans_count=1;
+				trans_count = 1;
 			}
 		});
-		 
-		 
+
 	}
 
-	//提货
+	// 提货
 	int tihuo_count;
-     private void showTihuoDialog() {
-    	 LayoutInflater inflater = LayoutInflater.from(this);
- 		View tihuoView = (View) inflater.inflate(R.layout.tihuo_service, null);
-		tihuoTextView = (TextView) tihuoView.findViewById(R.id.product_ordsubmit_count);
- 		tihuoAdd = (ImageView) tihuoView.findViewById(R.id.product_ordsubmit_count_add);
- 		tihuoreduce = (ImageView) tihuoView.findViewById(R.id.product_ordsubmit_count_sub);
-    	tihuoOk = (Button) tihuoView.findViewById(R.id.dialog_ok);
-    	
-    	tihuocancel = (Button) tihuoView.findViewById(R.id.dialog_cancel);
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+	private void showTihuoDialog() {
+		LayoutInflater inflater = LayoutInflater.from(this);
+		View tihuoView = (View) inflater.inflate(R.layout.tihuo_service, null);
+		tihuoTextView = (TextView) tihuoView
+				.findViewById(R.id.product_ordsubmit_count);
+		tihuoAdd = (ImageView) tihuoView
+				.findViewById(R.id.product_ordsubmit_count_add);
+		tihuoreduce = (ImageView) tihuoView
+				.findViewById(R.id.product_ordsubmit_count_sub);
+		tihuoOk = (Button) tihuoView.findViewById(R.id.dialog_ok);
+
+		tihuocancel = (Button) tihuoView.findViewById(R.id.dialog_cancel);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setView(tihuoView);
 		builder.setCancelable(false);
 		dialog0 = builder.show();
-    	
- 		tihuoAdd.setOnClickListener(new OnClickListener() {
-			
+
+		tihuoAdd.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				tihuo_count++;
-				tihuoTextView.setText(""+tihuo_count);
+				tihuoTextView.setText("" + tihuo_count);
 			}
 		});
- 		tihuoreduce.setOnClickListener(new OnClickListener() {
-			
+		tihuoreduce.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (tihuo_count>1) {
+				if (tihuo_count > 1) {
 					tihuo_count--;
-					tihuoTextView.setText(""+tihuo_count);
-				}else {
-					tihuo_count=1;
+					tihuoTextView.setText("" + tihuo_count);
+				} else {
+					tihuo_count = 1;
 				}
 			}
 		});
- 		
- 		tihuoOk.setOnClickListener(new OnClickListener() {
-			
+
+		tihuoOk.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
- 		tihuocancel.setOnClickListener(new OnClickListener() {
-			
+		tihuocancel.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				dialog0.dismiss();
-				tihuo_count=1;
+				tihuo_count = 1;
 			}
 		});
- 		
+
 	}
 
-	int sale_count=1;
-	//卖出按钮
-   private void showSaleDialog() {
+	int sale_count = 1;
+
+	// 卖出按钮
+	private void showSaleDialog() {
 		// TODO Auto-generated method stub
-	   LayoutInflater inflater = LayoutInflater.from(this);
+		LayoutInflater inflater = LayoutInflater.from(this);
 		View saleView = (View) inflater.inflate(R.layout.sale_service, null);
-		product_ordsubmit_count2 = (TextView) saleView.findViewById(R.id.product_ordsubmit_count);
-	    //卖出价
-		salePrice = (EditText) saleView.findViewById(R.id.product_ordsubmit_price);
-	   //加号
-		add = (ImageView) saleView.findViewById(R.id.product_ordsubmit_count_add);
-	   //减号
-		reduce = (ImageView) saleView.findViewById(R.id.product_ordsubmit_count_sub);
+		product_ordsubmit_count2 = (TextView) saleView
+				.findViewById(R.id.product_ordsubmit_count);
+		// 卖出价
+		salePrice = (EditText) saleView
+				.findViewById(R.id.product_ordsubmit_price);
+		// 加号
+		add = (ImageView) saleView
+				.findViewById(R.id.product_ordsubmit_count_add);
+		// 减号
+		reduce = (ImageView) saleView
+				.findViewById(R.id.product_ordsubmit_count_sub);
 		ok = (Button) saleView.findViewById(R.id.dialog_ok);
 		cancel = (Button) saleView.findViewById(R.id.dialog_cancel);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -478,51 +569,50 @@ public class TradeServiceActivity extends BaseActivity {
 		builder.setCancelable(false);
 		dialog = builder.show();
 		add.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				sale_count++;
-				product_ordsubmit_count2.setText(""+sale_count);
-				
+				product_ordsubmit_count2.setText("" + sale_count);
+
 			}
 		});
 		reduce.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (sale_count>1) {
+				if (sale_count > 1) {
 					sale_count--;
-					product_ordsubmit_count2.setText(""+sale_count);
-				}else {
-					sale_count=1;
+					product_ordsubmit_count2.setText("" + sale_count);
+				} else {
+					sale_count = 1;
 				}
-				
+
 			}
 		});
 		cancel.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				dialog.dismiss();
-				sale_count=1;
+				sale_count = 1;
 			}
 		});
 		ok.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
-		
+
 	}
 
-	//买入按钮
+	// 买入按钮
 	private void showBuyDialog() {
 		// TODO Auto-generated method stub
 
@@ -537,7 +627,7 @@ public class TradeServiceActivity extends BaseActivity {
 		// 数量
 		product_ordsubmit_count = (TextView) view
 				.findViewById(R.id.product_ordsubmit_count);
-          
+
 		// 买入价格
 		product_ordsubmit_price = (EditText) view
 				.findViewById(R.id.product_ordsubmit_price);
@@ -550,35 +640,30 @@ public class TradeServiceActivity extends BaseActivity {
 		dialog_ok = (Button) view.findViewById(R.id.dialog_ok);
 		diaog_cancel = (Button) view.findViewById(R.id.dialog_cancel);
 		final AlertDialog builder = new AlertDialog.Builder(this).create();
-		builder.setView(view,0,0,0,0);
+		builder.setView(view, 0, 0, 0, 0);
 		builder.setCancelable(false);
 		builder.show();
-		
-	      
-		
-		
-       //取消按钮
+
+		// 取消按钮
 		diaog_cancel.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				builder.dismiss();
-				count_buy=1;
+				count_buy = 1;
 			}
 		});
-		//确定按钮
+		// 确定按钮
 		dialog_ok.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
-		
-		
+
 		product_ordsubmit_count_add.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -598,24 +683,23 @@ public class TradeServiceActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if (count_buy > 1) {
-					
+
 					count_buy--;
 					product_ordsubmit_count.addTextChangedListener(textWatcher);
 
 					product_ordsubmit_count.setText(count_buy + "");
-                 
-				
+
 				} else {
 					count_buy = 1;
 				}
 
 			}
 		});
-	
 
 	}
-	//买入价监听
-    private TextWatcher	textWatcher = new TextWatcher() {
+
+	// 买入价监听
+	private TextWatcher textWatcher = new TextWatcher() {
 		private CharSequence charSequence;
 		private String price;
 
@@ -626,10 +710,11 @@ public class TradeServiceActivity extends BaseActivity {
 
 			price = product_ordsubmit_price.getText().toString().trim();
 			if (!TextUtils.isEmpty(price)) {
-				
-				product_total_price.setText(""+Arith.mul(Double.parseDouble(price), count_buy));
+
+				product_total_price.setText(""
+						+ Arith.mul(Double.parseDouble(price), count_buy));
 			} else {
-				
+
 				product_total_price.setText("0.00");
 			}
 
@@ -648,7 +733,7 @@ public class TradeServiceActivity extends BaseActivity {
 
 		}
 	};
-	
+
 	private Dialog dialog2;
 	private EditText salePrice;
 	private ImageView add;
@@ -671,7 +756,17 @@ public class TradeServiceActivity extends BaseActivity {
 	private ImageView transReduce;
 	private String unionid;
 	private String dgid;
-	
-
+	private double income;
+	private double tradeprice;
+	private int trans;
+	private int tihuo;
+	private int buygooding;
+	private int salgooding;
+	private int leftgoodassets;
+	private int totalasset;
+	private int dealnum;
+	private double totalbuy;
+	private double totaloutmoney;
+	private double downaward;
 
 }

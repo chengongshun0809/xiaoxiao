@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import zz.itcast.jiujinhui.R;
+import zz.itcast.jiujinhui.activity.LoginActivity;
 import zz.itcast.jiujinhui.activity.TradeServiceActivity;
 import zz.itcast.jiujinhui.res.NetUtils;
 import zz.itcast.jiujinhui.view.AutoScrollTextView;
@@ -409,12 +410,18 @@ public class TradeFragment extends BaseFragment {
 					public void onClick(View v) {
 
 						// TODO Auto-generated method stub
-
-						Intent intent = new Intent(getActivity(),
+                  Boolean isLogined=sp.getBoolean("isLogined", false);
+                  if (isLogined) {
+                	  Intent intent = new Intent(getActivity(),
 								TradeServiceActivity.class);
 						intent.putExtra("name", dealgoodname);
 						intent.putExtra("dealdgid", dgid);
 						startActivity(intent);
+				}else {
+					Intent intent=new Intent(getActivity(),LoginActivity.class);
+					startActivity(intent);
+				}
+						
 					}
 
 				});
