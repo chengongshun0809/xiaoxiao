@@ -1,9 +1,11 @@
 package zz.itcast.jiujinhui.activity;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.security.auth.PrivateCredentialPermission;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +48,9 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 public class TradeServiceActivity extends BaseActivity {
+	@ViewInject(R.id.scrollview)
+	private zz.itcast.jiujinhui.view.MyScrollView scrollview;
+
 	// 买入
 	@ViewInject(R.id.rb_buy_service)
 	private LinearLayout rb_buy_service;
@@ -130,7 +135,21 @@ public class TradeServiceActivity extends BaseActivity {
 	private TextView reward;
 
 	// 定义一个Handler对象
-	private final Handler handler = new Handler();
+	private final Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				UpdateUI();
+				scrollview.invalidate();// 定时刷新
+				break;
+
+			default:
+				break;
+			}
+
+		};
+
+	};
 
 	@Override
 	public void initListener() {
@@ -177,7 +196,7 @@ public class TradeServiceActivity extends BaseActivity {
 		sp = getSharedPreferences("user", 0);
 		unionid = sp.getString("unionid", null);
 		Log.e("ms我的unionID是：", unionid);
-		
+
 	}
 
 	@Override
@@ -185,22 +204,20 @@ public class TradeServiceActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		return R.layout.frag_trade_service;
 	}
-//获取到数据后要更新ui
-	Handler mHandler = new Handler() {
 
-		public void handleMessage(android.os.Message msg) {
-			switch (msg.what) {
-			case 1:
-				UpdateUI();
-				break;
-
-			default:
-				break;
-			}
-
-		};
-
-	};
+	// 获取到数据后要更新ui
+	/*
+	 * Handler mHandler = new Handler() {
+	 * 
+	 * public void handleMessage(android.os.Message msg) { switch (msg.what) {
+	 * case 1: UpdateUI(); break;
+	 * 
+	 * default: break; }
+	 * 
+	 * };
+	 * 
+	 * };
+	 */
 	@Override
 	public void initData() {
 		// TODO Auto-generated method stub
@@ -228,30 +245,41 @@ public class TradeServiceActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				String url_serviceinfo = "https://www.4001149114.com/NLJJ/ddapp/hallorder?unionid="
 						+ unionid + "&dgid=" + dgid;
-				HttpsURLConnection connection = NetUtils.httpsconnNoparm(
-						url_serviceinfo, "POST");
-				int code;
-				try {
-					code = connection.getResponseCode();
-					if (code == 200) {
-						InputStream iStream = connection.getInputStream();
-						String infojson = NetUtils.readString(iStream);
-						JSONObject jsonObject = new JSONObject(infojson);
-						// Log.e("ssssssssss", jsonObject.toString());
-						parseJson(jsonObject);
+				while (!Thread.currentThread().isInterrupted()) {
+					HttpsURLConnection connection = NetUtils.httpsconnNoparm(
+							url_serviceinfo, "POST");
+					int code;
+					try {
+						code = connection.getResponseCode();
+						if (code == 200) {
+							InputStream iStream = connection.getInputStream();
+							String infojson = NetUtils.readString(iStream);
+							JSONObject jsonObject = new JSONObject(infojson);
+							// Log.e("ssssssssss", jsonObject.toString());
+							parseJson(jsonObject);
 
+						}
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Message message = new Message();
+					message.what = 1;
+					handler.sendMessage(message);
+					try {
+						Thread.sleep(30000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						Thread.currentThread().interrupt();
+					}
 				}
 
 			}
 		}).start();
 
 	}
-
 
 	protected void parseJson(JSONObject jsonObject) {
 		try {
@@ -269,12 +297,9 @@ public class TradeServiceActivity extends BaseActivity {
 			totalbuy = jsonObject2.getDouble("buyintotal");
 			totaloutmoney = jsonObject2.getDouble("buyouttotal");
 			downaward = jsonObject2.getDouble("downaward");
-			Message message = new Message();
-			message.what = 1;
-			mHandler.sendMessage(message);
-	    Log.e("shunshun", tradeprice+"");		
-			
-			
+
+			Log.e("shunshun", tradeprice + "");
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -284,24 +309,26 @@ public class TradeServiceActivity extends BaseActivity {
 
 	protected void UpdateUI() {
 		// TODO Auto-generated method stub
-		realpri.setText((tradeprice/100) + "");
-		jiubi.setText((income/100) + "");
+		DecimalFormat df=new DecimalFormat("#0.00");
+		
+		realpri.setText(df.format((tradeprice/100)));
+		jiubi.setText(df.format((income/100)));
 		total_assets.setText(totalasset + "");
 		left_assets.setText(leftgoodassets + "");
 		buying.setText(buygooding + "");
 		saling.setText(salgooding + "");
 		dealed.setText(dealnum + "");
-		reward.setText((downaward/100) + "");
-
-		double shouyi = (tradeprice * (leftgoodassets+salgooding)
-			+totaloutmoney- totalbuy)/100;
-		total_shouyi.setText(shouyi + "");
+		reward.setText(df.format((downaward/100)));
+		
+		/*double shouyi = (tradeprice * (leftgoodassets + salgooding)
+				+ totaloutmoney - totalbuy) / 100;*/
+		total_shouyi.setText(df.format((tradeprice * (leftgoodassets + salgooding)
+				+ totaloutmoney - totalbuy)/100));
 
 		// total_zd.setText(text)
-		
+
 	}
-	
-	
+
 	// 交易曲线图适配器
 	public class MypagerAdapter extends FragmentPagerAdapter {
 		private ArrayList<Fragment> fragmentsList1;
@@ -769,4 +796,10 @@ public class TradeServiceActivity extends BaseActivity {
 	private double totaloutmoney;
 	private double downaward;
 
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		handler.removeMessages(1);
+	}
 }
