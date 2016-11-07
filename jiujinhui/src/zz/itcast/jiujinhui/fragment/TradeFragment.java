@@ -213,7 +213,7 @@ public class TradeFragment extends BaseFragment {
 	public void initData() {
 		autoScrollTextView.init(getActivity().getWindowManager());
 		autoScrollTextView.startScroll();
-
+		inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		/*
 		 * new Thread(new Runnable() {
 		 * 
@@ -333,12 +333,10 @@ public class TradeFragment extends BaseFragment {
 	}
 
 	private void UpdateUI() {
-		inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if ("3".equals(maingoodstate)) {
 			View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
 			ll_content.addView(view);
 			btn_public = (RelativeLayout) view.findViewById(R.id.btn_public);
-
 			tv_rate = (TextView) view.findViewById(R.id.rate);
 			tv_name = (TextView) view.findViewById(R.id.name);
 			tv_dealcode = (TextView) view.findViewById(R.id.dealcode);
