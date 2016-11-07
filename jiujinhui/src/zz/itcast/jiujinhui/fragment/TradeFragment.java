@@ -1,6 +1,7 @@
 package zz.itcast.jiujinhui.fragment;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import zz.itcast.jiujinhui.activity.TradeServiceActivity;
 import zz.itcast.jiujinhui.res.NetUtils;
 import zz.itcast.jiujinhui.view.AutoScrollTextView;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -102,7 +104,7 @@ public class TradeFragment extends BaseFragment {
 	private JSONArray dealgoodslist;
 	private TextView dealcode;
 
-	private String state;
+	private String maingoodstate;
 	private int length;
 
 	private TextView lijin;
@@ -197,6 +199,15 @@ public class TradeFragment extends BaseFragment {
 			updateViewPager();
 		}
 	};
+	private LayoutInflater inflater;
+	private int maingooddealprice;
+	private RelativeLayout ll_ren;
+	private TextView left;
+	private String maindealterm;
+	private String maindealcode;
+	private String mainstock;
+	private String mainrate;
+	private String mainname;
 
 	@Override
 	public void initData() {
@@ -299,24 +310,16 @@ public class TradeFragment extends BaseFragment {
 			JSONObject jsonObject2 = new JSONObject(maindealgood);
 			Log.e("v", jsonObject2.getString("dgid"));
 
-			// 置顶酒金窖名字
-			String name = jsonObject2.getString("name");
+			mainname = jsonObject2.getString("name");
 			Log.e("vv", jsonObject2.getString("name"));
-			sp.edit().putString("name", name).commit();
-			// 交易代码
-			String dealcode = jsonObject2.getString("dealcode");
-			sp.edit().putString("dealcode", dealcode).commit();
-			// 限量发行
-			String stock = jsonObject2.getString("stock");
-			sp.edit().putString("stock", stock).commit();
-			// 增益比例
-			String rate = jsonObject2.getString("rate");
-			sp.edit().putString("rate", rate).commit();
-			state = jsonObject2.getString("state");
-			sp.edit().putString("state", state).commit();
-			// 离认购期
-			String dealterm = jsonObject2.getString("dealterm");
-			sp.edit().putString("dealterm", dealterm).commit();
+			maingooddealprice = jsonObject2.getInt("realprice");
+			maindealcode = jsonObject2.getString("dealcode");
+			
+			mainstock = jsonObject2.getString("stock");
+			mainrate = jsonObject2.getString("rate");
+			maingoodstate = jsonObject2.getString("state");
+			
+			maindealterm = jsonObject2.getString("dealterm");
 
 			dealgoodslist = jsonObject.getJSONArray("dealgoods");
 			length = dealgoodslist.length();
@@ -330,11 +333,8 @@ public class TradeFragment extends BaseFragment {
 	}
 
 	private void UpdateUI() {
-		// TODO Auto-generated method stub
-		// 要获取要将动态加载内容置入的容器 LinearLayout
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
-		if ("3".equals(sp.getString("state", null))) {
-
+		inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		if ("3".equals(maingoodstate)) {
 			View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
 			ll_content.addView(view);
 			btn_public = (RelativeLayout) view.findViewById(R.id.btn_public);
@@ -347,18 +347,18 @@ public class TradeFragment extends BaseFragment {
 			tv_dealterm = (TextView) view.findViewById(R.id.realprice);
 			tv_tian = (TextView) view.findViewById(R.id.term_day);
 			btn_name = (TextView) view.findViewById(R.id.btn_name);
-			tv_rate.setText(sp.getString("rate", null));
-			tv_name.setText(sp.getString("name", null));
-			tv_dealcode.setText(sp.getString("dealcode", null));
-			tv_stock.setText(sp.getString("stock", null));
-
+			tv_rate.setText(mainrate);
+			tv_name.setText(mainname);
+			tv_dealcode.setText(maindealcode);
+			tv_stock.setText(mainstock);
+          
 			btn_name.setText("我要认购");
 			btn_name.setTextSize(18);
 			btn_name.setTextColor(R.color.white_btn_ren);
 			tv_lirengou.setText("离认购还剩:");
 			tv_lirengou.setTextSize(15);
 			// tv_lirengou.setTextColor(R.color.red);
-			tv_dealterm.setText(sp.getString("dealterm", null));
+			tv_dealterm.setText(maindealterm);
 			tv_dealterm.setTextSize(15);
 			// tv_dealterm.setTextColor(R.color.red);
 			tv_tian.setText("天");
@@ -366,9 +366,44 @@ public class TradeFragment extends BaseFragment {
 			btn_public.setVisibility(View.VISIBLE);
 			// tv_tian.setTextColor(R.color.red);
 		}
-
+		if ("1".equals(maingoodstate)) {
+			View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
+			ll_content.addView(view);
+			btn_public = (RelativeLayout) view.findViewById(R.id.btn_public);
+			tv_dealterm = (TextView) view.findViewById(R.id.realprice);
+              ll_ren = (RelativeLayout) view.findViewById(R.id.rengouqi);
+              ll_ren.setVisibility(View.VISIBLE);
+              left = (TextView) view.findViewById(R.id.left_day);
+			tv_rate = (TextView) view.findViewById(R.id.rate);
+			tv_name = (TextView) view.findViewById(R.id.name);
+			tv_dealcode = (TextView) view.findViewById(R.id.dealcode);
+			tv_stock = (TextView) view.findViewById(R.id.stock);
+			//认购期还剩？天
+			left.setText(maindealterm);
+			
+			tv_tian = (TextView) view.findViewById(R.id.term_day);
+			btn_name = (TextView) view.findViewById(R.id.btn_name);
+			tv_rate.setText(mainrate);
+			tv_name.setText(mainname);
+			tv_dealcode.setText(maindealcode);
+			tv_stock.setText(mainstock);
+          
+			btn_name.setText("我要认购");
+			btn_name.setTextSize(18);
+			btn_name.setTextColor(R.color.white_btn_ren);
+			
+			// tv_lirengou.setTextColor(R.color.red);
+			DecimalFormat df=new DecimalFormat("#0.00");
+			
+			
+			tv_dealterm.setText(df.format(maingooddealprice/100));
+			tv_dealterm.setTextSize(15);
+			// tv_dealterm.setTextColor(R.color.red);
+			
+			btn_public.setVisibility(View.VISIBLE);
+			// tv_tian.setTextColor(R.color.red);
+		}
 		for (int i = 0; i < length; i++) {
-
 			// 遍历JSONArray
 			View view1 = inflater.inflate(R.layout.trade_item_jiujiao, null);
 			// ll_content.addView(view1);
@@ -441,6 +476,7 @@ public class TradeFragment extends BaseFragment {
 	public void onDestroy() {
 
 		isPlaying = false;
+		mHandler.removeMessages(1);
 		super.onDestroy();
 
 	}

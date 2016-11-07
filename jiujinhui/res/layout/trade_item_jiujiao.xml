@@ -16,6 +16,7 @@
         android:visibility="gone" >
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -23,10 +24,48 @@
             android:layout_marginRight="10dp"
             android:text="交易中"
             android:textColor="#cc0000" />
-    </RelativeLayout>
 
+   
+    </RelativeLayout>
+     <RelativeLayout
+        android:id="@+id/rengouqi"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:visibility="gone" >
+         <LinearLayout
+            
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+             >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="认购期还剩: "
+                android:textColor="#cc0000"
+                android:textSize="15.5sp" />
+
+            <TextView
+                android:id="@+id/left_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6"
+                android:textColor="#cc0000"
+                android:textSize="15.5sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="天"
+                android:textColor="#cc0000"
+                android:textSize="15.5sp" />
+        </LinearLayout>
+</RelativeLayout>
     <LinearLayout
-       
         android:layout_width="fill_parent"
         android:layout_height="150dp"
         android:orientation="horizontal" >
@@ -184,7 +223,7 @@
                     android:id="@+id/term_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="天"
+                    android:text="元"
                     android:textColor="#3366cc"
                     android:textSize="15.5sp" />
             </LinearLayout>

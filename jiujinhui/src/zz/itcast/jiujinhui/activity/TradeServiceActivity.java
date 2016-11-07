@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.net.ssl.HttpsURLConnection;
 import javax.security.auth.PrivateCredentialPermission;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +45,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -135,7 +137,7 @@ public class TradeServiceActivity extends BaseActivity {
 	private TextView reward;
 
 	// 定义一个Handler对象
-	private final Handler handler = new Handler() {
+	private  Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
@@ -195,7 +197,7 @@ public class TradeServiceActivity extends BaseActivity {
 		Log.e("mm", dgid);
 		sp = getSharedPreferences("user", 0);
 		unionid = sp.getString("unionid", null);
-		Log.e("ms我的unionID是：", unionid);
+		//Log.e("ms我的unionID是：", unionid);
 
 	}
 
@@ -264,11 +266,9 @@ public class TradeServiceActivity extends BaseActivity {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					Message message = new Message();
-					message.what = 1;
-					handler.sendMessage(message);
+					
 					try {
-						Thread.sleep(30000);
+						Thread.sleep(300000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -284,20 +284,28 @@ public class TradeServiceActivity extends BaseActivity {
 	protected void parseJson(JSONObject jsonObject) {
 		try {
 			income = jsonObject.getDouble("income");
-			tradeprice = jsonObject.getDouble("realprice");
+			tradeprice = jsonObject.getDouble("realprice"); 
 			String dealdatajson = jsonObject.getString("dealdata");
-			JSONObject jsonObject2 = new JSONObject(dealdatajson);
+			jsonObject2 = new JSONObject(dealdatajson);
 			trans = jsonObject2.getInt("buybacknum");
 			tihuo = jsonObject2.getInt("consumenum");
 			buygooding = jsonObject2.getInt("getnum");
 			salgooding = jsonObject2.getInt("putnum");
 			leftgoodassets = jsonObject2.getInt("stock");
-			totalasset = jsonObject2.getInt("subnum");
+			//认购
+			rengou = jsonObject2.getInt("subnum");
 			dealnum = jsonObject2.getInt("dealnum");
 			totalbuy = jsonObject2.getDouble("buyintotal");
 			totaloutmoney = jsonObject2.getDouble("buyouttotal");
 			downaward = jsonObject2.getDouble("downaward");
-
+			//今日涨跌
+		
+		jsonArraylist = jsonObject.getJSONArray("todaydeal");
+			
+			
+			Message message = new Message();
+			message.what = 1;
+			handler.sendMessage(message);
 			Log.e("shunshun", tradeprice + "");
 
 		} catch (JSONException e) {
@@ -313,7 +321,9 @@ public class TradeServiceActivity extends BaseActivity {
 		
 		realpri.setText(df.format((tradeprice/100)));
 		jiubi.setText(df.format((income/100)));
-		total_assets.setText(totalasset + "");
+		totalassets = leftgoodassets+buygooding;
+		
+		total_assets.setText(totalassets+"");
 		left_assets.setText(leftgoodassets + "");
 		buying.setText(buygooding + "");
 		saling.setText(salgooding + "");
@@ -324,8 +334,20 @@ public class TradeServiceActivity extends BaseActivity {
 				+ totaloutmoney - totalbuy) / 100;*/
 		total_shouyi.setText(df.format((tradeprice * (leftgoodassets + salgooding)
 				+ totaloutmoney - totalbuy)/100));
-
-		// total_zd.setText(text)
+          //今日涨跌
+		 try {
+			JSONObject object = (JSONObject) jsonArraylist.get(0);
+			double firstprice=object.getInt("price");
+			double today_zd=tradeprice-firstprice;
+			total_zd.setText(df.format(today_zd/100));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		 
 
 	}
 
@@ -790,12 +812,18 @@ public class TradeServiceActivity extends BaseActivity {
 	private int buygooding;
 	private int salgooding;
 	private int leftgoodassets;
-	private int totalasset;
+	private int rengou;
 	private int dealnum;
 	private double totalbuy;
 	private double totaloutmoney;
 	private double downaward;
 
+	private int totalassets;
+
+	private JSONObject jsonObject2;
+
+	private JSONArray jsonArraylist;
+ 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub

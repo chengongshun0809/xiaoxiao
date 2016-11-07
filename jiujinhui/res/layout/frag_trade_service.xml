@@ -113,7 +113,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:text="325.55"
+                                android:text="0.00"
                                 android:textColor="#ffffff"
                                 android:textSize="16sp" />
                         </RelativeLayout>
@@ -185,7 +185,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
                                 android:layout_marginTop="10dp"
-                                android:text="55.11"
+                                android:text="0.00"
                                 android:textColor="#ff0033"
                                 android:textSize="15sp" />
 
@@ -234,7 +234,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="40dp"
                                 android:layout_marginTop="10dp"
-                                android:text="3"
+                                android:text="0"
                                 android:textColor="#ff0033"
                                 android:textSize="15sp" />
 
@@ -283,7 +283,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="28dp"
                                 android:layout_marginTop="10dp"
-                                android:text="84.77"
+                                android:text="0.00"
                                 android:textColor="#ff0033"
                                 android:textSize="15sp" />
 
@@ -332,7 +332,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="40dp"
                                 android:layout_marginTop="10dp"
-                                android:text="3"
+                                android:text="0"
                                 android:textColor="#ff0033"
                                 android:textSize="15sp" />
 
@@ -627,7 +627,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="28dp"
                                 android:layout_marginTop="10dp"
-                                android:text="55.11"
+                                android:text="0.00"
                                 android:textColor="#ff0033"
                                 android:textSize="15sp" />
 
