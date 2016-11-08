@@ -135,7 +135,7 @@ public class TradeServiceActivity extends BaseActivity {
 	// 奖励
 	@ViewInject(R.id.reward)
 	private TextView reward;
-
+	boolean stopThread = false;
 	// 定义一个Handler对象
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -179,10 +179,11 @@ public class TradeServiceActivity extends BaseActivity {
 
 			@Override
 			public void run() {
-				
-				String url_serviceinfo = "https://www.4001149114.com/NLJJ/ddapp/hallorder?unionid="
-						+ unionid + "&dgid=" + dgid;
-				
+				while (!stopThread) {
+
+					String url_serviceinfo = "https://www.4001149114.com/NLJJ/ddapp/hallorder?unionid="
+							+ unionid + "&dgid=" + dgid;
+
 					HttpsURLConnection connection = NetUtils.httpsconnNoparm(
 							url_serviceinfo, "POST");
 					int code;
@@ -194,9 +195,9 @@ public class TradeServiceActivity extends BaseActivity {
 							JSONObject jsonObject = new JSONObject(infojson);
 							// Log.e("ssssssssss", jsonObject.toString());
 							parseJson(jsonObject);
-                           Thread.sleep(30000);    
-                           handler.removeMessages(0);
-                           handler.sendEmptyMessage(0);
+							Thread.sleep(30000);
+                         
+							 
 						}
 
 					} catch (Exception e) {
@@ -204,9 +205,8 @@ public class TradeServiceActivity extends BaseActivity {
 						e.printStackTrace();
 					}
 
-				
+				}
 			}
-
 		}).start();
 	}
 
@@ -233,9 +233,9 @@ public class TradeServiceActivity extends BaseActivity {
 		ViewUtils.inject(this);
 		tv__title.setText("交易服务");
 		// hscrollview定时滚动
-		
+
 		handler.sendEmptyMessageDelayed(2, 3000);
-		
+
 		dgid = getIntent().getStringExtra("dealdgid");
 		String name = getIntent().getStringExtra("name");
 		jiujiaoname.setText(name);
@@ -286,9 +286,9 @@ public class TradeServiceActivity extends BaseActivity {
 		// 获取数据
 		Message message = new Message();
 		message.what = 0;
-		handler.sendMessage(message);
+		handler.sendMessageDelayed(message, 1000);
 		// refreshdata();
-          
+
 	}
 
 	protected void parseJson(JSONObject jsonObject) {
@@ -835,11 +835,8 @@ public class TradeServiceActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
+		stopThread=true;
 		super.onDestroy();
-
-		/*handler.removeMessages(0);
-		handler.removeMessages(1);
-		handler.removeMessages(2);*/
-		
+        
 	}
 }
