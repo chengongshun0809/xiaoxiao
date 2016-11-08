@@ -5,10 +5,18 @@
     android:orientation="vertical" >
 
     <include layout="@layout/layout_base_title" />
+    
+   <TextView 
+       android:layout_marginTop="50dp"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:text="    本产品一方面满足广大会员的及时用酒需求，随时随地打开APP购买美酒；一方面满足会员的卖自身产品需求，成为了我们的会员之后可以开自己的店（自媒体商城），卖自己的东西。"       
+      android:textSize="22sp"
+       /> 
  <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="30dp"
-         android:layout_marginTop="360dp"
+         android:layout_marginTop="50dp"
          >
     
     <TextView
@@ -26,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Copyright©2015-2065" />
+            android:text="Copyright©2011-2016" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -36,8 +44,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="北京酒金会云端通路科技股份有限公司" />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="特普(北京)电子商务有限公司" />
+
     </RelativeLayout>
 
     

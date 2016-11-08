@@ -73,21 +73,7 @@ public class TradeFragment extends BaseFragment {
 
 	}
 
-	Handler mHandler = new Handler() {
-
-		public void handleMessage(android.os.Message msg) {
-			switch (msg.what) {
-			case 1:
-				UpdateUI();
-				break;
-
-			default:
-				break;
-			}
-
-		};
-
-	};
+	
 	private RelativeLayout btn_public;
 	private TextView tv_jin;
 	private TextView tv_deaTextView;
@@ -196,7 +182,18 @@ public class TradeFragment extends BaseFragment {
 
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			updateViewPager();
+			switch (msg.what) {
+			case 0:
+				updateViewPager();
+				break;
+			case 1:	
+				UpdateUI();
+				break;
+			default:
+				break;
+			}
+			
+			
 		}
 	};
 	private LayoutInflater inflater;
@@ -325,7 +322,7 @@ public class TradeFragment extends BaseFragment {
 			length = dealgoodslist.length();
 			Message message = new Message();
 			message.what = 1;
-			mHandler.sendMessage(message);
+			handler.sendMessage(message);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -474,7 +471,8 @@ public class TradeFragment extends BaseFragment {
 	public void onDestroy() {
 
 		isPlaying = false;
-		mHandler.removeMessages(1);
+		handler.removeMessages(0);
+		handler.removeMessages(1);
 		super.onDestroy();
 
 	}

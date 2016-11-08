@@ -137,14 +137,19 @@ public class TradeServiceActivity extends BaseActivity {
 	private TextView reward;
 
 	// 定义一个Handler对象
-	private  Handler handler = new Handler() {
+	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
+			case 0:
+				refreshdata();
+				break;
 			case 1:
 				UpdateUI();
 				scrollview.invalidate();// 定时刷新
 				break;
-
+			case 2:
+				UpdatehscrollviewUI();
+				// hscrollview.invalidate();
 			default:
 				break;
 			}
@@ -166,38 +171,78 @@ public class TradeServiceActivity extends BaseActivity {
 
 	}
 
-	// 当前滚动距离
-	int currentX = 0;
+	protected void refreshdata() {
+		// TODO Auto-generated method stub
+
+		// TODO Auto-generated method stub
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				
+				String url_serviceinfo = "https://www.4001149114.com/NLJJ/ddapp/hallorder?unionid="
+						+ unionid + "&dgid=" + dgid;
+				
+					HttpsURLConnection connection = NetUtils.httpsconnNoparm(
+							url_serviceinfo, "POST");
+					int code;
+					try {
+						code = connection.getResponseCode();
+						if (code == 200) {
+							InputStream iStream = connection.getInputStream();
+							String infojson = NetUtils.readString(iStream);
+							JSONObject jsonObject = new JSONObject(infojson);
+							// Log.e("ssssssssss", jsonObject.toString());
+							parseJson(jsonObject);
+                           Thread.sleep(30000);    
+                           handler.removeMessages(0);
+                           handler.sendEmptyMessage(0);
+						}
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				
+			}
+
+		}).start();
+	}
 
 	// 实现滚动线程
-	private Runnable hscrollRunnable = new Runnable() {
+	protected void UpdatehscrollviewUI() {
+		// TODO Auto-generated method stub
+		// 判断宽度
+		int off = ll_scroll.getMeasuredWidth();
 
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			// 判断宽度
-			int off = ll_scroll.getMeasuredWidth();
+		hscrollview.scrollBy(off, 0);
+		/*
+		 * Message msg = new Message(); msg.what = 2;
+		 */
+		handler.removeMessages(2);
+		handler.sendEmptyMessageDelayed(2, 3000);
+	}
 
-			hscrollview.scrollBy(off, 0);
-
-			handler.postDelayed(this, 4000);
-
-		}
-	};
+	// 当前滚动距离
+	int currentX = 0;
 
 	@Override
 	public void initView() {
 		// TODO Auto-generated method stub
 		ViewUtils.inject(this);
 		tv__title.setText("交易服务");
-		handler.post(hscrollRunnable);
+		// hscrollview定时滚动
+		
+		handler.sendEmptyMessageDelayed(2, 3000);
+		
 		dgid = getIntent().getStringExtra("dealdgid");
 		String name = getIntent().getStringExtra("name");
 		jiujiaoname.setText(name);
 		Log.e("mm", dgid);
 		sp = getSharedPreferences("user", 0);
 		unionid = sp.getString("unionid", null);
-		//Log.e("ms我的unionID是：", unionid);
+		// Log.e("ms我的unionID是：", unionid);
 
 	}
 
@@ -239,45 +284,17 @@ public class TradeServiceActivity extends BaseActivity {
 		tabs_buysale.setShouldExpand(true);
 
 		// 获取数据
-
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				String url_serviceinfo = "https://www.4001149114.com/NLJJ/ddapp/hallorder?unionid="
-						+ unionid + "&dgid=" + dgid;
-				while (!Thread.currentThread().isInterrupted()) {
-					HttpsURLConnection connection = NetUtils.httpsconnNoparm(
-							url_serviceinfo, "POST");
-					int code;
-					try {
-						code = connection.getResponseCode();
-						if (code == 200) {
-							InputStream iStream = connection.getInputStream();
-							String infojson = NetUtils.readString(iStream);
-							JSONObject jsonObject = new JSONObject(infojson);
-							// Log.e("ssssssssss", jsonObject.toString());
-							parseJson(jsonObject);
-
-						}
-
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				}
-
-			}
-		}).start();
-
+		Message message = new Message();
+		message.what = 0;
+		handler.sendMessage(message);
+		// refreshdata();
+          
 	}
 
 	protected void parseJson(JSONObject jsonObject) {
 		try {
 			income = jsonObject.getDouble("income");
-			tradeprice = jsonObject.getDouble("realprice"); 
+			tradeprice = jsonObject.getDouble("realprice");
 			String dealdatajson = jsonObject.getString("dealdata");
 			jsonObject2 = new JSONObject(dealdatajson);
 			trans = jsonObject2.getInt("buybacknum");
@@ -285,17 +302,16 @@ public class TradeServiceActivity extends BaseActivity {
 			buygooding = jsonObject2.getInt("getnum");
 			salgooding = jsonObject2.getInt("putnum");
 			leftgoodassets = jsonObject2.getInt("stock");
-			//认购
+			// 认购
 			rengou = jsonObject2.getInt("subnum");
 			dealnum = jsonObject2.getInt("dealnum");
 			totalbuy = jsonObject2.getDouble("buyintotal");
 			totaloutmoney = jsonObject2.getDouble("buyouttotal");
 			downaward = jsonObject2.getDouble("downaward");
-			//今日涨跌
-		
-		jsonArraylist = jsonObject.getJSONArray("todaydeal");
-			
-			
+			// 今日涨跌
+
+			jsonArraylist = jsonObject.getJSONArray("todaydeal");
+
 			Message message = new Message();
 			message.what = 1;
 			handler.sendMessage(message);
@@ -310,37 +326,36 @@ public class TradeServiceActivity extends BaseActivity {
 
 	protected void UpdateUI() {
 		// TODO Auto-generated method stub
-		DecimalFormat df=new DecimalFormat("#0.00");
-		
-		realpri.setText(df.format((tradeprice/100)));
-		jiubi.setText(df.format((income/100)));
-		totalassets = leftgoodassets+buygooding;
-		
-		total_assets.setText(totalassets+"");
+		DecimalFormat df = new DecimalFormat("#0.00");
+
+		realpri.setText(df.format((tradeprice / 100)));
+		jiubi.setText(df.format((income / 100)));
+		totalassets = leftgoodassets + buygooding;
+
+		total_assets.setText(totalassets + "");
 		left_assets.setText(leftgoodassets + "");
 		buying.setText(buygooding + "");
 		saling.setText(salgooding + "");
 		dealed.setText(dealnum + "");
-		reward.setText(df.format((downaward/100)));
-		
-		/*double shouyi = (tradeprice * (leftgoodassets + salgooding)
-				+ totaloutmoney - totalbuy) / 100;*/
-		total_shouyi.setText(df.format((tradeprice * (leftgoodassets + salgooding)
-				+ totaloutmoney - totalbuy)/100));
-          //今日涨跌
-		 try {
+		reward.setText(df.format((downaward / 100)));
+
+		/*
+		 * double shouyi = (tradeprice * (leftgoodassets + salgooding) +
+		 * totaloutmoney - totalbuy) / 100;
+		 */
+		total_shouyi.setText(df
+				.format((tradeprice * (leftgoodassets + salgooding)
+						+ totaloutmoney - totalbuy) / 100));
+		// 今日涨跌
+		try {
 			JSONObject object = (JSONObject) jsonArraylist.get(0);
-			double firstprice=object.getInt("price");
-			double today_zd=tradeprice-firstprice;
-			total_zd.setText(df.format(today_zd/100));
+			double firstprice = object.getInt("price");
+			double today_zd = tradeprice - firstprice;
+			total_zd.setText(df.format(today_zd / 100));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		 
 
 	}
 
@@ -816,11 +831,15 @@ public class TradeServiceActivity extends BaseActivity {
 	private JSONObject jsonObject2;
 
 	private JSONArray jsonArraylist;
- 
+
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+
+		/*handler.removeMessages(0);
 		handler.removeMessages(1);
+		handler.removeMessages(2);*/
+		
 	}
 }

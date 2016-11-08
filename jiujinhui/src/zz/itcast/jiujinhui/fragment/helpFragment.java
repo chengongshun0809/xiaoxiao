@@ -21,7 +21,7 @@ public class helpFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		ViewUtils.inject(this, view);
 		tv_back.setVisibility(view.GONE);
-		tv__title.setText("帮助中心");
+		tv__title.setText("关于我们");
 	}
 	@Override
 	public void initData() {
