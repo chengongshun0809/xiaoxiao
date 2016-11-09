@@ -196,8 +196,7 @@ public class TradeServiceActivity extends BaseActivity {
 							// Log.e("ssssssssss", jsonObject.toString());
 							parseJson(jsonObject);
 							Thread.sleep(30000);
-                         
-							 
+
 						}
 
 					} catch (Exception e) {
@@ -211,15 +210,31 @@ public class TradeServiceActivity extends BaseActivity {
 	}
 
 	// 实现滚动线程
+	int j = 0;
+
 	protected void UpdatehscrollviewUI() {
 		// TODO Auto-generated method stub
+		// 总宽度
+		int totaloff = hscrollview.getMeasuredWidth();
 		// 判断宽度
 		int off = ll_scroll.getMeasuredWidth();
+		int fax = totaloff/off;
+		
+		if (j <7) {
+			hscrollview.scrollBy(off, 0);
+			j = j + 1;
+		}else {
+			j=0;
+			hscrollview.scrollBy(-7*off, 0);
+		}
 
-		hscrollview.scrollBy(off, 0);
+		// 当前移动的水平距离
 		/*
-		 * Message msg = new Message(); msg.what = 2;
+		 * int nowoff=
+		 * 
+		 * //总宽度 int totaloff=hscrollview.getMeasuredWidth();
 		 */
+
 		handler.removeMessages(2);
 		handler.sendEmptyMessageDelayed(2, 3000);
 	}
@@ -835,8 +850,8 @@ public class TradeServiceActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
-		stopThread=true;
+		stopThread = true;
 		super.onDestroy();
-        
+
 	}
 }
