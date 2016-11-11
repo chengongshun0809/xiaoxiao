@@ -301,7 +301,7 @@ public class TradeServiceActivity extends BaseActivity {
 		// 获取数据
 		Message message = new Message();
 		message.what = 0;
-		handler.sendMessageDelayed(message, 1000);
+		handler.sendMessageDelayed(message, 500);
 		// refreshdata();
 
 	}
@@ -326,12 +326,13 @@ public class TradeServiceActivity extends BaseActivity {
 			// 今日涨跌
 
 			jsonArraylist = jsonObject.getJSONArray("todaydeal");
-
+            
 			Message message = new Message();
 			message.what = 1;
 			handler.sendMessage(message);
 			Log.e("shunshun", tradeprice + "");
-
+			
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

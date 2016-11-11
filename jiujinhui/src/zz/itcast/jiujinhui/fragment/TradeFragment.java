@@ -15,7 +15,6 @@ import zz.itcast.jiujinhui.R;
 import zz.itcast.jiujinhui.activity.LoginActivity;
 import zz.itcast.jiujinhui.activity.TradeServiceActivity;
 import zz.itcast.jiujinhui.res.NetUtils;
-import zz.itcast.jiujinhui.view.AutoScrollTextView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -39,7 +38,7 @@ import android.widget.TextView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
-@SuppressLint("ResourceAsColor")
+@SuppressLint({ "ResourceAsColor", "CutPasteId" })
 public class TradeFragment extends BaseFragment {
 
 	@ViewInject(R.id.tv_back)
@@ -73,13 +72,12 @@ public class TradeFragment extends BaseFragment {
 
 	}
 
-	
 	private RelativeLayout btn_public;
 	private TextView tv_jin;
 	private TextView tv_deaTextView;
 	private TextView tv_day;
 	private RelativeLayout trading;
-	
+
 	private TextView tv_name2;
 	private String dealgoodname;
 	private LinearLayout litmit;
@@ -107,8 +105,8 @@ public class TradeFragment extends BaseFragment {
 	@ViewInject(R.id.vp_home_fragment)
 	private ViewPager vp_home_fragment;
 	// 跑马灯
-	@ViewInject(R.id.TextViewNotice)
-	private zz.itcast.jiujinhui.view.AutoScrollTextView autoScrollTextView;
+	//@ViewInject(R.id.TextViewNotice)
+	//private zz.itcast.jiujinhui.view.AutoScrollTextView autoScrollTextView;
 
 	private void initViewPager() {
 		// TODO Auto-generated method stub
@@ -186,18 +184,17 @@ public class TradeFragment extends BaseFragment {
 			case 0:
 				updateViewPager();
 				break;
-			case 1:	
+			case 1:
 				UpdateUI();
 				break;
 			default:
 				break;
 			}
-			
-			
+
 		}
 	};
 	private LayoutInflater inflater;
-	private int maingooddealprice;
+	private double maingooddealprice;
 	private RelativeLayout ll_ren;
 	private TextView left;
 	private String maindealterm;
@@ -205,12 +202,15 @@ public class TradeFragment extends BaseFragment {
 	private String mainstock;
 	private String mainrate;
 	private String mainname;
+	private TextView reprice;
 
 	@Override
 	public void initData() {
-		autoScrollTextView.init(getActivity().getWindowManager());
-		autoScrollTextView.startScroll();
-		inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		//跑马灯
+		/*autoScrollTextView.init(getActivity().getWindowManager());
+		autoScrollTextView.startScroll();*/
+		inflater = (LayoutInflater) getActivity().getSystemService(
+				Context.LAYOUT_INFLATER_SERVICE);
 		/*
 		 * new Thread(new Runnable() {
 		 * 
@@ -309,13 +309,13 @@ public class TradeFragment extends BaseFragment {
 
 			mainname = jsonObject2.getString("name");
 			Log.e("vv", jsonObject2.getString("name"));
-			maingooddealprice = jsonObject2.getInt("realprice");
+			maingooddealprice = jsonObject2.getDouble("realprice");
 			maindealcode = jsonObject2.getString("dealcode");
-			
+
 			mainstock = jsonObject2.getString("stock");
 			mainrate = jsonObject2.getString("rate");
 			maingoodstate = jsonObject2.getString("state");
-			
+
 			maindealterm = jsonObject2.getString("dealterm");
 
 			dealgoodslist = jsonObject.getJSONArray("dealgoods");
@@ -339,14 +339,15 @@ public class TradeFragment extends BaseFragment {
 			tv_dealcode = (TextView) view.findViewById(R.id.dealcode);
 			tv_stock = (TextView) view.findViewById(R.id.stock);
 			tv_lirengou = (TextView) view.findViewById(R.id.li);
-			tv_dealterm = (TextView) view.findViewById(R.id.realprice);
+			tv_dealterm = (TextView) view
+					.findViewById(R.id.realprice_chengjiao);
 			tv_tian = (TextView) view.findViewById(R.id.term_day);
 			btn_name = (TextView) view.findViewById(R.id.btn_name);
 			tv_rate.setText(mainrate);
 			tv_name.setText(mainname);
 			tv_dealcode.setText(maindealcode);
 			tv_stock.setText(mainstock);
-          
+
 			btn_name.setText("我要认购");
 			btn_name.setTextSize(18);
 			btn_name.setTextColor(R.color.white_btn_ren);
@@ -365,36 +366,34 @@ public class TradeFragment extends BaseFragment {
 			View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
 			ll_content.addView(view);
 			btn_public = (RelativeLayout) view.findViewById(R.id.btn_public);
-			tv_dealterm = (TextView) view.findViewById(R.id.realprice);
-              ll_ren = (RelativeLayout) view.findViewById(R.id.rengouqi);
-              ll_ren.setVisibility(View.VISIBLE);
-              left = (TextView) view.findViewById(R.id.left_day);
+			reprice = (TextView) view.findViewById(R.id.realprice_chengjiao);
+			ll_ren = (RelativeLayout) view.findViewById(R.id.rengouqi);
+			ll_ren.setVisibility(View.VISIBLE);
+			left = (TextView) view.findViewById(R.id.left_day);
 			tv_rate = (TextView) view.findViewById(R.id.rate);
 			tv_name = (TextView) view.findViewById(R.id.name);
 			tv_dealcode = (TextView) view.findViewById(R.id.dealcode);
 			tv_stock = (TextView) view.findViewById(R.id.stock);
-			//认购期还剩？天
+			// 认购期还剩？天
 			left.setText(maindealterm);
-			
+
 			tv_tian = (TextView) view.findViewById(R.id.term_day);
 			btn_name = (TextView) view.findViewById(R.id.btn_name);
 			tv_rate.setText(mainrate);
 			tv_name.setText(mainname);
 			tv_dealcode.setText(maindealcode);
 			tv_stock.setText(mainstock);
-          
 			btn_name.setText("我要认购");
 			btn_name.setTextSize(18);
 			btn_name.setTextColor(R.color.white_btn_ren);
-			
+
 			// tv_lirengou.setTextColor(R.color.red);
-			DecimalFormat df=new DecimalFormat("#0.00");
-			
-			
-			tv_dealterm.setText(df.format(maingooddealprice/100));
-			tv_dealterm.setTextSize(15);
+			DecimalFormat df = new DecimalFormat("#0.00");
+         // Log.e("maingooddealprice", "hhhjh");
+			reprice.setText(df.format(maingooddealprice/100));
+			reprice.setTextSize(15);
 			// tv_dealterm.setTextColor(R.color.red);
-			
+
 			btn_public.setVisibility(View.VISIBLE);
 			// tv_tian.setTextColor(R.color.red);
 		}
@@ -404,7 +403,8 @@ public class TradeFragment extends BaseFragment {
 			// ll_content.addView(view1);
 			tv_name2 = (TextView) view1.findViewById(R.id.name);
 
-			tv_deaTextView = (TextView) view1.findViewById(R.id.realprice);
+			tv_deaTextView = (TextView) view1
+					.findViewById(R.id.realprice_chengjiao);
 			tv_day = (TextView) view1.findViewById(R.id.term_day);
 			litmit = (LinearLayout) view1.findViewById(R.id.limit);
 			litmit.setVisibility(View.GONE);
@@ -440,18 +440,19 @@ public class TradeFragment extends BaseFragment {
 					public void onClick(View v) {
 
 						// TODO Auto-generated method stub
-                  Boolean isLogined=sp.getBoolean("isLogined", false);
-                  if (isLogined) {
-                	  Intent intent = new Intent(getActivity(),
-								TradeServiceActivity.class);
-						intent.putExtra("name", dealgoodname);
-						intent.putExtra("dealdgid", dgid);
-						startActivity(intent);
-				}else {
-					Intent intent=new Intent(getActivity(),LoginActivity.class);
-					startActivity(intent);
-				}
-						
+						Boolean isLogined = sp.getBoolean("isLogined", false);
+						if (isLogined) {
+							Intent intent = new Intent(getActivity(),
+									TradeServiceActivity.class);
+							intent.putExtra("name", dealgoodname);
+							intent.putExtra("dealdgid", dgid);
+							startActivity(intent);
+						} else {
+							Intent intent = new Intent(getActivity(),
+									LoginActivity.class);
+							startActivity(intent);
+						}
+
 					}
 
 				});

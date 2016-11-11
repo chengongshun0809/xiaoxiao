@@ -212,7 +212,7 @@
                     android:textSize="15.5sp" />
 
                 <TextView
-                    android:id="@+id/realprice"
+                    android:id="@+id/realprice_chengjiao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="298.26"

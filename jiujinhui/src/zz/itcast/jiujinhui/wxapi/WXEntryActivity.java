@@ -226,7 +226,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 																											// Auto-generated
 																											// method
 																											// stub
- 
+
 																										}
 																									});
 
@@ -290,9 +290,13 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 			break;
 		case BaseResp.ErrCode.ERR_USER_CANCEL: // 发送取消
 			Toast.makeText(this, "取消登录", Toast.LENGTH_SHORT).show();
+			finish();
+			sp.edit().putBoolean("isLogined", false).commit();
 			break;
 		case BaseResp.ErrCode.ERR_AUTH_DENIED: // 发送被拒绝
 			Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
+			finish();
+			sp.edit().putBoolean("isLogined", false).commit();
 			break;
 		default:
 			break;
