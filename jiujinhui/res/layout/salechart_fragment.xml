@@ -83,6 +83,7 @@
         android:divider="@color/listviewdivider"
         android:dividerHeight="1px"
         android:scrollbars="none"
+        android:fastScrollEnabled="false"
          >
     </ListView>
 </LinearLayout>

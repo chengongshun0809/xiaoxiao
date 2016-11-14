@@ -212,6 +212,8 @@ public class NowTradeRecoedFragment extends BaseFragment {
 			for (int i = 0; i < jsonArraylist.length(); i++) {
 				JSONObject object = (JSONObject) jsonArraylist.get(i);
 				  nowprice = object.getDouble("price");
+				  //createtime不能转换为double
+				  
 				nowcreatetime = object.getDouble("createtime");
 				
 				

@@ -53,11 +53,14 @@ public class SaleChartFragment extends BaseFragment {
 				adapter = new MyAdapter(getActivity());
 				listView.setAdapter(adapter);
 				adapter.notifyDataSetChanged();
-           
+				
+				handler.sendEmptyMessage(1);
 			case 1:
 
 				scrolllistview();
-
+				handler.removeMessages(1);
+				
+				handler.sendEmptyMessageDelayed(1, 1000);
 				break;
 			default:
 				break;
@@ -66,7 +69,8 @@ public class SaleChartFragment extends BaseFragment {
 		};
 
 	};
-
+	//禁止listview手动滑动
+     
 	private JSONArray jsonArraylist;
 
 	private String createtime;
@@ -92,7 +96,7 @@ public class SaleChartFragment extends BaseFragment {
 	private MyAdapter adapter;
 
 	private List<Map<String, Object>> data = null;
-	private Timer timer;
+	
 
 	@Override
 	public void initData() {
@@ -104,21 +108,17 @@ public class SaleChartFragment extends BaseFragment {
 
 		// listView.invalidate();
 		data = new ArrayList<Map<String, Object>>();
-		// listview开始滚动
-      /*listView.setOnTouchListener(new OnTouchListener() {
+		// 禁止listView手动滚动
+      listView.setOnTouchListener(new OnTouchListener() {
 		
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			// TODO Auto-generated method stub
 			switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				handler.removeMessages(1);
-				listView.smoothScrollBy(0, 0);
-				
-				break;
+			
            case MotionEvent.ACTION_MOVE:
-        	   handler.sendEmptyMessage(1);
-        	   break;
+        	   return true;
+        	   
 			default:
 				break;
 			}
@@ -126,9 +126,9 @@ public class SaleChartFragment extends BaseFragment {
 			
 			return true;
 		}
-	});*/
+	});
 	}
-
+   
 	protected void scrolllistview() {
 		// TODO Auto-generated method stub
 		// int totaloff = listView.getMeasuredHeight();
@@ -137,18 +137,15 @@ public class SaleChartFragment extends BaseFragment {
 		if (index <=3 * data.size()) {
 			listView.smoothScrollBy(10, 0);
 			index += 1;
-			handler.removeMessages(1);
-			Message message = handler.obtainMessage();
-			message.what = 1;
-			handler.sendMessageDelayed(message, 1000);
-		} else {
-			index = 0;
 			
+
+		}else {
+			index = 0;
 			listView.smoothScrollToPosition(index);
+			handler.removeMessages(1);
 			handler.sendEmptyMessage(1);
 		}
 		
-
 	}
 
 	// listview自动滚动
@@ -229,9 +226,9 @@ public class SaleChartFragment extends BaseFragment {
 		ViewUtils.inject(this, view);
 
 		sp = getActivity().getSharedPreferences("user", 0);
-		Message message = handler.obtainMessage();
+		/*Message message = handler.obtainMessage();
 		message.what = 1;
-		handler.sendMessage(message);
+		handler.sendMessage(message);*/
 
 	}
 
