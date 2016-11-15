@@ -8,10 +8,11 @@
     >
 
     <lecho.lib.hellocharts.view.LineChartView
-       
+      
+       android:layout_marginTop="10dp"
         android:id="@+id/line_chart"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="200dp"
         >
     </lecho.lib.hellocharts.view.LineChartView>
 

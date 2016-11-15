@@ -50,7 +50,7 @@ public class SaleChartFragment extends BaseFragment {
 			case 0:
 				data.clear();
 				data.addAll(list);
-				adapter = new MyAdapter(getActivity());
+				adapter = new MyAdapter();
 				listView.setAdapter(adapter);
 				adapter.notifyDataSetChanged();
 				
@@ -59,9 +59,9 @@ public class SaleChartFragment extends BaseFragment {
 
 				scrolllistview();
 				handler.removeMessages(1);
-				
+
 				handler.sendEmptyMessageDelayed(1, 1000);
-				break;
+				break; 
 			default:
 				break;
 			}
@@ -138,11 +138,10 @@ public class SaleChartFragment extends BaseFragment {
 			listView.smoothScrollBy(10, 0);
 			index += 1;
 			
-
 		}else {
 			index = 0;
 			listView.smoothScrollToPosition(index);
-			handler.removeMessages(1);
+			
 			handler.sendEmptyMessage(1);
 		}
 		
@@ -219,17 +218,17 @@ public class SaleChartFragment extends BaseFragment {
 		}
 
 	}
-
+	LayoutInflater inflater;
 	@Override
 	public void initView(View view) {
 		// TODO Auto-generated method stub
 		ViewUtils.inject(this, view);
-
+		
 		sp = getActivity().getSharedPreferences("user", 0);
 		/*Message message = handler.obtainMessage();
 		message.what = 1;
 		handler.sendMessage(message);*/
-
+		inflater = getActivity().getLayoutInflater();
 	}
 
 	class ViewHolder {
@@ -242,12 +241,8 @@ public class SaleChartFragment extends BaseFragment {
 
 	public class MyAdapter extends BaseAdapter {
 
-		private LayoutInflater mInflater = null;
-
-		private MyAdapter(Context context) {
-			// 根据context上下文加载布局，这里的是Demo17Activity本身，即this
-			this.mInflater = LayoutInflater.from(context);
-		}
+		
+		
 
 		@Override
 		public int getCount() {
@@ -272,11 +267,12 @@ public class SaleChartFragment extends BaseFragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			ViewHolder holder = null;
+			
 			// 如果缓存
 			if (convertView == null) {
 				holder = new ViewHolder();
 				// 根据自定义的item布局加载布局
-				convertView = mInflater.inflate(
+				convertView = inflater.inflate(
 						R.layout.trade_service_listview_item, null);
 				holder.saleprice = (TextView) convertView
 						.findViewById(R.id.sale_price);

@@ -203,6 +203,8 @@ public class TradeFragment extends BaseFragment {
 	private String mainrate;
 	private String mainname;
 	private TextView reprice;
+	private RelativeLayout jiaoyizhong;
+	private JSONObject jsonObject2;
 
 	@Override
 	public void initData() {
@@ -211,36 +213,7 @@ public class TradeFragment extends BaseFragment {
 		autoScrollTextView.startScroll();*/
 		inflater = (LayoutInflater) getActivity().getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
-		/*
-		 * new Thread(new Runnable() {
-		 * 
-		 * private URL url;
-		 * 
-		 * @Override public void run() {
-		 * 
-		 * try { JSONObject jsonObject = new JSONObject();
-		 * jsonObject.put("name", "NL");
-		 * 
-		 * String urlpath =
-		 * "https://www.4001149114.com/NLJJ/dealwine/gettoken?appname=NL";
-		 * 
-		 * HttpsURLConnection conn = NetUtils.httpsconn(urlpath, jsonObject,
-		 * "POST");
-		 * 
-		 * // 若传递成功，解析服务器返回的数据 int code = conn.getResponseCode(); if (code ==
-		 * 200) { InputStream is = conn.getInputStream(); String json =
-		 * NetUtils.readString(is); JSONObject jsonObject2 = new
-		 * JSONObject(json); String s = jsonObject2.getString("message"); String
-		 * t = jsonObject2.getString("token"); Log.e("ss", s);
-		 * System.err.println(t); } else { Toast.makeText(getActivity(),
-		 * "数据提交失败", 1).show(); }
-		 * 
-		 * } catch (Exception e) { // TODO: handle exception }
-		 * 
-		 * }
-		 * 
-		 * }).start();
-		 */
+		
 		new Thread(new Runnable() {
 
 			@Override
@@ -304,7 +277,7 @@ public class TradeFragment extends BaseFragment {
 			Log.e("sss", "是否成功:" + success);
 			// 置顶的酒金窖
 			String maindealgood = jsonObject.getString("maindealgood");
-			JSONObject jsonObject2 = new JSONObject(maindealgood);
+			jsonObject2 = new JSONObject(maindealgood);
 			Log.e("v", jsonObject2.getString("dgid"));
 
 			mainname = jsonObject2.getString("name");
@@ -397,6 +370,86 @@ public class TradeFragment extends BaseFragment {
 			btn_public.setVisibility(View.VISIBLE);
 			// tv_tian.setTextColor(R.color.red);
 		}
+		//交易期
+		if ("2".equals(maingoodstate)) {
+			View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
+			ll_content.addView(view);
+			btn_public = (RelativeLayout) view.findViewById(R.id.btn_public);
+			reprice = (TextView) view.findViewById(R.id.realprice_chengjiao);
+			ll_ren = (RelativeLayout) view.findViewById(R.id.rengouqi);
+			ll_ren.setVisibility(View.GONE);
+			left = (TextView) view.findViewById(R.id.left_day);
+			tv_rate = (TextView) view.findViewById(R.id.rate);
+			tv_name = (TextView) view.findViewById(R.id.name);
+			tv_dealcode = (TextView) view.findViewById(R.id.dealcode);
+			tv_stock = (TextView) view.findViewById(R.id.stock);
+			// 认购期还剩？天
+			left.setText(maindealterm);
+            jiaoyizhong = (RelativeLayout) view.findViewById(R.id.jiaoyizhong);
+			tv_tian = (TextView) view.findViewById(R.id.term_day);
+			btn_name = (TextView) view.findViewById(R.id.btn_name);
+			tv_rate.setText(mainrate);
+			tv_name.setText(mainname);
+			tv_dealcode.setText(maindealcode);
+			tv_stock.setText(mainstock);
+			btn_name.setText("进入交易大厅");
+			btn_name.setTextSize(18);
+			btn_name.setTextColor(R.color.white_btn_ren);
+
+			// tv_lirengou.setTextColor(R.color.red);
+			DecimalFormat df = new DecimalFormat("#0.00");
+         // Log.e("maingooddealprice", "hhhjh");
+			reprice.setText(df.format(maingooddealprice/100));
+			reprice.setTextSize(15);
+			// tv_dealterm.setTextColor(R.color.red);
+                jiaoyizhong.setVisibility(view.VISIBLE);
+                
+			btn_public.setVisibility(View.VISIBLE);
+			// tv_tian.setTextColor(R.color.red);
+          
+			
+			
+			
+			
+			
+			
+			
+			
+			btn_public.setOnClickListener(new OnClickListener() {
+
+				private String maingoodname;
+				private String dgid;
+
+				@Override
+				public void onClick(View v) {
+                       
+						try {
+						dgid = jsonObject2.getString("dgid");
+							maingoodname = jsonObject2.getString("name");
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+                        
+					// TODO Auto-generated method stub
+					Boolean isLogined = sp.getBoolean("isLogined", false);
+					if (isLogined) {
+						Intent intent = new Intent(getActivity(),
+								TradeServiceActivity.class);
+						intent.putExtra("name", maingoodname);
+						intent.putExtra("dealdgid", dgid);
+						startActivity(intent);
+					} else {
+						Intent intent = new Intent(getActivity(),
+								LoginActivity.class);
+						startActivity(intent);
+					}
+
+				}
+
+			});
+		}
+		
 		for (int i = 0; i < length; i++) {
 			// 遍历JSONArray
 			View view1 = inflater.inflate(R.layout.trade_item_jiujiao, null);

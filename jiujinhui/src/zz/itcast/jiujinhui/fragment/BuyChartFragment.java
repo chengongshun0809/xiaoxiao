@@ -10,6 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.security.auth.PrivateCredentialPermission;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +24,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,14 +45,14 @@ public class BuyChartFragment extends BaseFragment {
 	@ViewInject(R.id.listview)
 	private ListView listView;
 	boolean stopThread = false;
-	int index = 0;
+	private int index = 0;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 0:
 				data.clear();
 				data.addAll(list);
-				adapter = new MyAdapter(getActivity());
+				adapter = new MyAdapter();
 				listView.setAdapter(adapter);
 				adapter.notifyDataSetChanged();
 				handler.sendEmptyMessage(1);
@@ -60,6 +62,7 @@ public class BuyChartFragment extends BaseFragment {
 				handler.removeMessages(1);
 
 				handler.sendEmptyMessageDelayed(1, 1000);
+				
 				break;
 			default:
 				break;
@@ -131,14 +134,14 @@ public class BuyChartFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		// int totaloff = listView.getMeasuredHeight();
 
-		if (index < 3 * data.size()) {
+		if (index <=3 * data.size()) {
 			listView.smoothScrollBy(10, 0);
 			index += 1;
-
+			
 		} else {
 			index = 0;
-
 			listView.smoothScrollToPosition(index);
+			
 			handler.sendEmptyMessage(1);
 		}
 
@@ -226,9 +229,11 @@ public class BuyChartFragment extends BaseFragment {
 		 * Message message = handler.obtainMessage(); message.what = 1;
 		 * handler.sendMessage(message);
 		 */
-
+		inflater = getActivity().getLayoutInflater();
 	}
-
+	LayoutInflater inflater;
+	
+	
 	class ViewHolder {
 		public TextView saleprice;
 		private TextView salecount;
@@ -239,12 +244,9 @@ public class BuyChartFragment extends BaseFragment {
 
 	public class MyAdapter extends BaseAdapter {
 
-		private LayoutInflater mInflater = null;
+		
 
-		private MyAdapter(Context context) {
-			// 根据context上下文加载布局，这里的是Demo17Activity本身，即this
-			this.mInflater = LayoutInflater.from(context);
-		}
+		
 
 		@Override
 		public int getCount() {
@@ -269,11 +271,13 @@ public class BuyChartFragment extends BaseFragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			ViewHolder holder = null;
+			
+			
 			// 如果缓存
 			if (convertView == null) {
 				holder = new ViewHolder();
 				// 根据自定义的item布局加载布局
-				convertView = mInflater.inflate(
+				convertView = inflater.inflate(
 						R.layout.trade_service_listview_item, null);
 				holder.saleprice = (TextView) convertView
 						.findViewById(R.id.sale_price);
@@ -333,6 +337,7 @@ public class BuyChartFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		stopThread = true;
 		super.onDestroy();
-
+           handler.removeMessages(0);
+           handler.removeMessages(1);
 	}
 }
