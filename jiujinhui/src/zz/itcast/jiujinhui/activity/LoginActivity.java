@@ -116,9 +116,8 @@ public class LoginActivity extends BaseActivity {
 				req.scope="snsapi_userinfo";
 				req.state="none";
 				api.sendReq(req);
-				sp.edit().putBoolean("isLogined", true).commit();
+				//sp.edit().putBoolean("isLogined", true).commit();
 				finish();
-				
 			
 			}
 

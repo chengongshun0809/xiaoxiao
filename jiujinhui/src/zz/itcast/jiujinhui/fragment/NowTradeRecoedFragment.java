@@ -155,7 +155,8 @@ public class NowTradeRecoedFragment extends BaseFragment {
 
 		// Y轴是根据数据的大小自动设置Y轴上限(在下面我会给出固定Y轴数据个数的解决方案)
 		Axis axisY = new Axis().setHasLines(true); // Y轴
-		axisY.setName("");// y轴标注
+		axisY.setName("价格");// y轴标注
+
 		axisY.setTextSize(10);// 设置字体大小
 		data.setAxisYLeft(axisY); // Y轴设置在左边
 		// data.setAxisYRight(axisY); //y轴设置在右边

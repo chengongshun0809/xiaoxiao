@@ -29,7 +29,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
 	private IWXAPI mApi;
-	private SharedPreferences sp;
+	private static SharedPreferences sp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -155,30 +155,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 																									+ "  "
 																									+ headimgurl);
 
-																					/*
-																					 * Intent
-																					 * intent
-																					 * =
-																					 * new
-																					 * Intent
-																					 * (
-																					 * WXEntryActivity
-																					 * .
-																					 * this
-																					 * ,
-																					 * MainActivity
-																					 * .
-																					 * class
-																					 * )
-																					 * ;
-																					 * 
-																					 * startActivity
-																					 * (
-																					 * intent
-																					 * )
-																					 * ;
-																					 */
-
+																					
 																					sp.edit()
 																							.putBoolean(
 																									"isLogined",
@@ -286,17 +263,16 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 						}
 
 					});
-
+			finish();
 			break;
 		case BaseResp.ErrCode.ERR_USER_CANCEL: // 发送取消
 			Toast.makeText(this, "取消登录", Toast.LENGTH_SHORT).show();
-			finish();
-			sp.edit().putBoolean("isLogined", false).commit();
+			
+			
 			break;
 		case BaseResp.ErrCode.ERR_AUTH_DENIED: // 发送被拒绝
 			Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
-			finish();
-			sp.edit().putBoolean("isLogined", false).commit();
+			
 			break;
 		default:
 			break;
@@ -307,7 +283,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 	@Override
 	public void onReq(BaseReq resp) {
 		// TODO Auto-generated method stub
-
+		finish();
 	}
 
 }

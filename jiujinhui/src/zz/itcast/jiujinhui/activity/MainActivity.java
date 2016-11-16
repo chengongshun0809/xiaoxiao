@@ -98,15 +98,7 @@ public class MainActivity extends BaseActivity {
 					sp = getSharedPreferences("user", MODE_PRIVATE);
 					boolean isLogined = sp.getBoolean("isLogined", false);
 					if (isLogined == false) {
-						// û�е�¼
-						/*
-						 * Intent intent = new Intent(MainActivity.this,
-						 * LoginActivity.class); intent.putExtra("person",
-						 * "person"); startActivityForResult(intent, 0);
-						 * radiogroup.check(R.id.rb_trade);
-						 */
-						// fm.beginTransaction().replace(R.id.fl, new
-						// NoLoginPersonFragment()).commit();
+						
 						Intent intent = new Intent(MainActivity.this,
 								LoginActivity.class);
 						startActivity(intent);
