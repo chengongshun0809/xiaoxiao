@@ -105,8 +105,8 @@ public class TradeFragment extends BaseFragment {
 	@ViewInject(R.id.vp_home_fragment)
 	private ViewPager vp_home_fragment;
 	// 跑马灯
-	//@ViewInject(R.id.TextViewNotice)
-	//private zz.itcast.jiujinhui.view.AutoScrollTextView autoScrollTextView;
+	// @ViewInject(R.id.TextViewNotice)
+	// private zz.itcast.jiujinhui.view.AutoScrollTextView autoScrollTextView;
 
 	private void initViewPager() {
 		// TODO Auto-generated method stub
@@ -208,37 +208,42 @@ public class TradeFragment extends BaseFragment {
 
 	@Override
 	public void initData() {
-		//跑马灯
-		/*autoScrollTextView.init(getActivity().getWindowManager());
-		autoScrollTextView.startScroll();*/
+		// 跑马灯
+		/*
+		 * autoScrollTextView.init(getActivity().getWindowManager());
+		 * autoScrollTextView.startScroll();
+		 */
 		inflater = (LayoutInflater) getActivity().getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
-		
+
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				try {
-					String urlpath = "https://www.4001149114.com/NLJJ/ddapp/ttzqlist";
-					HttpsURLConnection conn = NetUtils.httpsconnNoparm(urlpath,
-							"GET");
-					// 若连接服务器成功，返回数据
-					int code = conn.getResponseCode();
-					if (code == 200) {
+			
+					try {
+						String urlpath = "https://www.4001149114.com/NLJJ/ddapp/ttzqlist";
+						HttpsURLConnection conn = NetUtils.httpsconnNoparm(
+								urlpath, "GET");
+						// 若连接服务器成功，返回数据
+						int code = conn.getResponseCode();
+						if (code == 200) {
 
-						InputStream is = conn.getInputStream();
-						String json = NetUtils.readString(is);
-						// 解析json
-						parsonJson(json);
-						is.close();
-					}
+							InputStream is = conn.getInputStream();
+							String json = NetUtils.readString(is);
+							// 解析json
+							parsonJson(json);
+							Thread.sleep(30000);
+							is.close();
+						}
 
-				} catch (Exception e) {
-					// TODO: handle exception
-				} // TODO Auto-generated method stub
+					} catch (Exception e) {
+						// TODO: handle exception
+					} // TODO Auto-generated method stub
+
+				
 
 			}
-
 		}).start();
 	}
 
@@ -362,15 +367,15 @@ public class TradeFragment extends BaseFragment {
 
 			// tv_lirengou.setTextColor(R.color.red);
 			DecimalFormat df = new DecimalFormat("#0.00");
-         // Log.e("maingooddealprice", "hhhjh");
-			reprice.setText(df.format(maingooddealprice/100));
+			// Log.e("maingooddealprice", "hhhjh");
+			reprice.setText(df.format(maingooddealprice / 100));
 			reprice.setTextSize(15);
 			// tv_dealterm.setTextColor(R.color.red);
 
 			btn_public.setVisibility(View.VISIBLE);
 			// tv_tian.setTextColor(R.color.red);
 		}
-		//交易期
+		// 交易期
 		if ("2".equals(maingoodstate)) {
 			View view = inflater.inflate(R.layout.trade_item_jiujiao, null);
 			ll_content.addView(view);
@@ -385,7 +390,7 @@ public class TradeFragment extends BaseFragment {
 			tv_stock = (TextView) view.findViewById(R.id.stock);
 			// 认购期还剩？天
 			left.setText(maindealterm);
-            jiaoyizhong = (RelativeLayout) view.findViewById(R.id.jiaoyizhong);
+			jiaoyizhong = (RelativeLayout) view.findViewById(R.id.jiaoyizhong);
 			tv_tian = (TextView) view.findViewById(R.id.term_day);
 			btn_name = (TextView) view.findViewById(R.id.btn_name);
 			tv_rate.setText(mainrate);
@@ -398,23 +403,15 @@ public class TradeFragment extends BaseFragment {
 
 			// tv_lirengou.setTextColor(R.color.red);
 			DecimalFormat df = new DecimalFormat("#0.00");
-         // Log.e("maingooddealprice", "hhhjh");
-			reprice.setText(df.format(maingooddealprice/100));
+			// Log.e("maingooddealprice", "hhhjh");
+			reprice.setText(df.format(maingooddealprice / 100));
 			reprice.setTextSize(15);
 			// tv_dealterm.setTextColor(R.color.red);
-                jiaoyizhong.setVisibility(view.VISIBLE);
-                
+			jiaoyizhong.setVisibility(view.VISIBLE);
+
 			btn_public.setVisibility(View.VISIBLE);
 			// tv_tian.setTextColor(R.color.red);
-          
-			
-			
-			
-			
-			
-			
-			
-			
+
 			btn_public.setOnClickListener(new OnClickListener() {
 
 				private String maingoodname;
@@ -422,15 +419,15 @@ public class TradeFragment extends BaseFragment {
 
 				@Override
 				public void onClick(View v) {
-                       
-						try {
+
+					try {
 						dgid = jsonObject2.getString("dgid");
-							maingoodname = jsonObject2.getString("name");
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-                        
+						maingoodname = jsonObject2.getString("name");
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					// TODO Auto-generated method stub
 					Boolean isLogined = sp.getBoolean("isLogined", false);
 					if (isLogined) {
@@ -449,7 +446,7 @@ public class TradeFragment extends BaseFragment {
 
 			});
 		}
-		
+
 		for (int i = 0; i < length; i++) {
 			// 遍历JSONArray
 			View view1 = inflater.inflate(R.layout.trade_item_jiujiao, null);
@@ -543,6 +540,7 @@ public class TradeFragment extends BaseFragment {
 		return R.layout.frag_trade;
 
 	}
+   
 
 	@Override
 	public void onClick(View v) {

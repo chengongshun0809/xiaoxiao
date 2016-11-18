@@ -133,6 +133,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 																					JSONObject json = new JSONObject(
 																							responseInfo.result
 																									.toString());
+																					
+																					//Log.e("qqqqqqqqqqqqq", json+"");
 																					// 拿到昵称和头像
 																					// 用户的unionID
 																					String unionid = json

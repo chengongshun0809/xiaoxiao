@@ -28,6 +28,8 @@ public class PerInfoActivity extends BaseActivity {
 	private ImageView tv_back;
 	@ViewInject(R.id.tv__title)
 	private TextView tv__title;
+	@ViewInject(R.id.et_phonenumber)
+	private TextView et_phonenumber;
 	@ViewInject(R.id.et_register_username_id)
 	private TextView et_register_username_id;
 
@@ -51,6 +53,8 @@ public class PerInfoActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		sp = getSharedPreferences("user", 0);
 		isshun = getIntent().getStringExtra("shun");
+		
+		
 	}
 
 	@Override
@@ -73,6 +77,10 @@ public class PerInfoActivity extends BaseActivity {
 		// 微信昵称
 		String nickNameString = sp.getString("nickname", null);
 		et_register_username_id.setText(nickNameString);
+		
+		//个人手机号
+		String number=sp.getString("mobile", null);
+		et_phonenumber.setText(number);
 	}
 
 	@Override
@@ -86,7 +94,7 @@ public class PerInfoActivity extends BaseActivity {
 			btnOK = (Button) view.findViewById(R.id.dialog_ok);
 			btnCancel = (Button) view.findViewById(R.id.dialog_cancel);
 			final AlertDialog builder = new AlertDialog.Builder(this).create();
-			builder.setView(view);
+			builder.setView(view,0,0,0, 0);
 			builder.setCancelable(false);
 			builder.show();
 			btnOK.setOnClickListener(new OnClickListener() {

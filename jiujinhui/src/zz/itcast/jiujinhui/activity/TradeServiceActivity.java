@@ -308,7 +308,16 @@ public class TradeServiceActivity extends BaseActivity {
 
 	protected void parseJson(JSONObject jsonObject) {
 		try {
+			//用户手机号
+			String phonenum=jsonObject.getString("mobile");
+			Log.e("mobile", phonenum);
+			sp.edit().putString("mobile", phonenum).commit();
+			
 			income = jsonObject.getDouble("income");
+			
+			//sp.edit().putFloat("jiubi", (float) (income/100)).commit();
+			String incomeing=(income/100)+"";
+			sp.edit().putString("jiubi", incomeing).commit();
 			tradeprice = jsonObject.getDouble("realprice");
 			String dealdatajson = jsonObject.getString("dealdata");
 			jsonObject2 = new JSONObject(dealdatajson);
@@ -341,8 +350,7 @@ public class TradeServiceActivity extends BaseActivity {
 	}
 
 	protected void UpdateUI() {
-		// TODO Auto-generated method stub
-		DecimalFormat df = new DecimalFormat("#0.00");
+		df = new DecimalFormat("#0.00");
 
 		realpri.setText(df.format((tradeprice / 100)));
 		jiubi.setText(df.format((income / 100)));
@@ -847,6 +855,8 @@ public class TradeServiceActivity extends BaseActivity {
 	private JSONObject jsonObject2;
 
 	private JSONArray jsonArraylist;
+
+	private DecimalFormat df;
 
 	@Override
 	protected void onDestroy() {

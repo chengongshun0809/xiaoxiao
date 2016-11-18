@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.ViewUtils;
@@ -43,7 +44,10 @@ public class personFragment extends BaseFragment {
 	private LinearLayout personInfo;
 	@ViewInject(R.id.NickName)
 	private TextView NickName;
-	
+	@ViewInject(R.id.rl_jiubi)
+	private RelativeLayout rl_jiubi;
+	@ViewInject(R.id.person_jiubi)
+	private TextView person_jiubi;
 	// 圆形图片
 	@ViewInject(R.id.circleImabeView)
 	private zz.itcast.jiujinhui.view.CircleImageView circleImabeView;
@@ -64,6 +68,15 @@ public class personFragment extends BaseFragment {
 		// 微信昵称
 		String nickNameString = sp.getString("nickname", null);
 		NickName.setText(nickNameString);
+		
+		//酒币
+	   String jiubinum=sp.getString("jiubi", null);
+	   if (jiubinum==null) {
+		rl_jiubi.setVisibility(view.GONE);
+	}else {
+ 		person_jiubi.setText(jiubinum+"");
+	}
+		
 	}
 
 	@Override
